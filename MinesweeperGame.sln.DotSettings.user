@@ -1,0 +1,17 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/Nigel.Quinlan/Library/Caches/JetBrains/Rider2021.2/resharper-host/temp/Rider/vAny/CoverageData/_MinesweeperGame.-562368847/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1fe6f758_002D9404_002D4231_002D838c_002D66c3dc65eb6f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenRowsAndColsAndStringArrayInput_WhenGridObjectIsInstantiated_ThenObjectPropertiesAreCorrect" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.GivenRowsAndColsAndStringArrayInput_WhenGridObjectIsInstantiated_ThenObjectPropertiesAreCorrect&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.GivenRowsAndColsAndStringArrayInputContainingMines_WhenGridObjectIsInstantiated_ThenObjectPropertiesAreCorrect&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.GivenRowsAndColsAndStringArrayInputWithMines_WhenGridObjectIsInstantiated_ThenObjectPropertiesAreCorrect&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.Given_ChooseACell_WhenACellLocationIsChosen_ThenTheCellValueIsRevealed&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.Given_ASelectedCell_WhenRevealCellIsCalledOnACellThatHasNotBeenRevealed_ThenTheRevealedCellCounterIsIncrementedBy1&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.Given_ASelectedCell_WhenRevealCellIsCalledOnACellThatHasAlreadyBeenRevealed_ThenTheRevealedCellCounterDoesNotIncrement&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.CellTests.Given_ACell_WhenACellObjectIsCreatedAndTheValueIsIncrementedBy1_ThenTheCellValueis1&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::8A074197-0E92-4319-9BB0-9A5F664C541F::net5.0::MinesweeperGameTests.GridTests.Given_ASelectedCell_WhenIncrementCellValueIsCalled_ThenTheCellValueIncrementsBy1&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8aa2cb8f_002D11db_002D46ab_002D9acb_002D31bb25cfc13e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GivenRowsAndColsAndStringArrayInput_WhenGridObjectIsInstantiated_ThenObjectPropertiesAreCorrect #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

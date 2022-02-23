@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+
+namespace MinesweeperGame
+{
+    public class Grid
+    {
+        public Grid(int rows, int cols, string[,] input) // current minesweeper game creates this already.
+        {
+            Rows = rows;
+            Cols = cols;
+            Cells = new Cell[Rows, Cols];
+            InitialStringArray = input;
+        }
+
+        public string[,] InitialStringArray { get;}
+
+        public int Rows { get; set; }
+        public int Cols { get; set; }
+
+        public int NumberOfMines { get; set; }
+        public int NumberOfRevealedCells { get; set; }
+        
+        public Cell[,] Cells;
+        
+        public void InitialiseCells()
+        {
+            for (var x = 0; x < Rows; x++)
+            {
+                for (var y = 0; y < Cols; y++)
+                {
+                    if (InitialStringArray[x, y] == "*")
+                        Cells[x, y] = new Cell(new Location(x, y), 9, CellType.Mine);
+                    else
+                        Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
+                }
+            } 
+        }
+        
+        public void IncrementNeighbourMinesIfTouchingMines()
+        {
+            for (var x = 0; x < Rows; x++)
+            {
+                for (var y = 0; y < Cols; y++)
+                {
+                    var currentCell = Cells[x, y];
+                    // if current cell is a mine increment all its neighbours if neighbours are not a mine
+                    if (IsCellAMine(currentCell))
+                    {
+                        var neighbouringCells = AddValidNeighboursToList(currentCell);
+                        foreach (var neighbour in neighbouringCells)
+                        {
+                            if(neighbour.CellType == CellType.NotAMine)
+                                IncrementCellNeighbouringMines(neighbour);
+                        }
+                    }
+                }
+            }
+        }
+        
+        public List<Cell> AddValidNeighboursToList(Cell currentCell)
+        {
+            var upperBoundRowLimit = Cells.GetUpperBound(0);
+            var lowerBoundRowLimit = Cells.GetLowerBound(0);
+            var upperBoundColLimit = Cells.GetUpperBound(1);
+            var lowerBoundColLimit = Cells.GetLowerBound(1);
+            
+            var neighbouringCells = new List<Cell>();
+            // add neighbouring cells to list if in bounds
+            var isCellPreviousColSameRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit;
+            if (isCellPreviousColSameRowInBounds)
+                neighbouringCells.Add(Cells[currentCell.Location.Row, currentCell.Location.Col - 1]);
+            
+            var isCellPreviousColPreviousRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit &&
+                                                           currentCell.Location.Row - 1 >= lowerBoundRowLimit;
+            if(isCellPreviousColPreviousRowInBounds)
+                neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col - 1]);
+
+            var isCellPreviousColNextRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit &&
+                                                   currentCell.Location.Row + 1 <= upperBoundRowLimit;
+            if(isCellPreviousColNextRowInBounds)
+                neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col - 1]);
+
+            var isCellNextColSameRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit;
+            if(isCellNextColSameRowInBounds)
+                neighbouringCells.Add(Cells[currentCell.Location.Row, currentCell.Location.Col + 1]);
+            
+            var isCellNextColPreviousRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit &&
+                                                   currentCell.Location.Row - 1 >= lowerBoundRowLimit;
+            if (isCellNextColPreviousRowInBounds)
+            {
+                neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col + 1]); // previous row, next col
+                neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col]); // previous row same col
+            }
+            
+            var isCellNextColNextRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit &&
+                                               currentCell.Location.Row + 1 <= upperBoundRowLimit;
+            if (isCellNextColNextRowInBounds)
+            {
+                neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col + 1]); // next row, next col
+                neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col]); // next row, same col
+            }
+                
+            
+            var isCellSameColPreviousRowInBounds = currentCell.Location.Col <= upperBoundColLimit &&
+                                                   currentCell.Location.Row - 1 >= lowerBoundRowLimit;
+            if (isCellSameColPreviousRowInBounds)
+            {
+                
+            }
+            return neighbouringCells;
+        }
+
+        private static bool IsCellAMine(Cell currentCell)
+        {
+            return currentCell.CellType == CellType.Mine;
+        }
+        
+        public int GetCountOfMines()
+        {
+            for (var x = 0; x < Rows; x++)
+            {
+                for (var y = 0; y < Cols; y++)
+                {
+                    var currentCell = Cells[x, y];
+        
+                    if (currentCell.CellType == CellType.Mine)
+                    {
+                        NumberOfMines += 1;
+                    }
+                }
+            }
+            
+            return NumberOfMines;
+        }
+        
+        private void IncrementCellNeighbouringMines(Cell cell) => cell.NeighbouringMines += 1;
+        
+        public Cell RevealCell(Location location)
+        {
+            var selectedCell = Cells[location.Row, location.Col];
+            if (selectedCell.IsRevealed) return Cells[location.Row, location.Col];
+            selectedCell.IsRevealed = true;
+            IncrementCountOfRevealedCells();
+            return Cells[location.Row, location.Col];
+        }
+
+        public int IncrementCountOfRevealedCells() => NumberOfRevealedCells += 1;
+        
+        public int IncrementCellValue(Location location) => Cells[location.Row, location.Col].NeighbouringMines += 1;
+        
+        
+    }
+}
