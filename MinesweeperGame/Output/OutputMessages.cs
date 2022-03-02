@@ -18,7 +18,7 @@ namespace MinesweeperGame.Output
                    " \\/               \\/     \\/     \\/               \\/     \\/|__|         \\/" + eNL + eNL;
         }
 
-        public static readonly string HowToPlay = "HOW TO PLAY" +eNL;
+        public static readonly string HowToPlay = "HOW TO PLAY" + eNL;
         
         public static readonly string Instructions = "MineSweeper is a game where you need to guess the location of mines." + eNL +
                                                      "You win by selecting and revealing all the locations that are not mines." + eNL +

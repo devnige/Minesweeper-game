@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text;
 
 namespace MinesweeperGame
 {
@@ -151,6 +152,80 @@ namespace MinesweeperGame
         
         public int IncrementCellValue(Location location) => Cells[location.Row, location.Col].NeighbouringMines += 1;
         
+        public static string BuildGrid(Grid grid)
+        {
+            StringBuilder sb = new StringBuilder();
+            // TODO Could move to run method Console.Clear();
+            // Can use string concatenation or stringbuilder
+            sb.Append("   ");
+            for (var i = 0; i < grid.Cols; i++)
+            {
+                sb.Append($"{i}  ");
+            }
+            sb.Append(Environment.NewLine);
+            sb.Append("   ");
+            for (var i = 0; i < grid.Cols; i++)
+            {
+                sb.Append($"_  ");
+            }
+            sb.Append(Environment.NewLine);
+            for (var x = 0; x < grid.Rows; x++)
+            {
+                sb.Append($"{x}| ");
+                for (var y = 0; y < grid.Cols; y++)
+                {
+                    var currentCell = grid.Cells[x, y];
+
+                    if (!currentCell.IsRevealed && !currentCell.IsFlagged)
+                    {
+                        SetForegroundColour("hidden");
+                        sb.Append(Constants.HiddenCell);
+                    }
+                    
+                    else if (currentCell.IsFlagged)
+                    {
+                        SetForegroundColour("is flagged");
+                        sb.Append(Constants.FlaggedCell);
+                    }
+
+                    else if (currentCell.IsRevealed && currentCell.CellType == CellType.NotAMine)
+                    {
+                        SetForegroundColour("revealed not a mine");
+                        sb.Append(currentCell.NeighbouringMines + Constants.RevealedCell);
+                    }
+
+                    else if (currentCell.IsRevealed && currentCell.CellType == CellType.Mine)
+                    {
+                        SetForegroundColour("revealed is a mine");
+                        sb.Append(Constants.MineCell);
+                    }
+                }
+                sb.Append(Environment.NewLine);
+                SetForegroundColour("default");
+            }
+            return sb.ToString(); //string needed
+        }
         
+        private static void SetForegroundColour(string type)
+        {
+            switch (type)
+            {
+                case "hidden":
+                    Console.ForegroundColor = Constants.HiddenCellColour;
+                    break;
+                case "revealed not a mine":
+                    Console.ForegroundColor = Constants.RevealedCellNotAMine;
+                    break;
+                case "revealed is a mine":
+                    Console.ForegroundColor = Constants.RevealedCellMine;
+                    break;
+                case "is flagged":
+                    Console.ForegroundColor = Constants.FlaggedCellColour;
+                    break;
+                case "default":
+                    Console.ForegroundColor = Constants.DefaultTextColour;
+                    break;
+            }
+        }
     }
 }

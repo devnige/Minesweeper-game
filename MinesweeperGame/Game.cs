@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using System.Threading;
 using MinesweeperGame.Output;
-using static MinesweeperGame.Output.ConsoleOutput;
+using static MinesweeperGame.Grid;
 
 namespace MinesweeperGame
 {
@@ -9,7 +10,8 @@ namespace MinesweeperGame
     {
         private Grid _grid;
         private readonly TextReader _textReader;
-        private readonly TextWriter _textWriter;
+        private static TextWriter _textWriter;
+        // How would you write to a stream as well as console?
         private bool _gameOver;
         private InputValidation _inputValidation;
         
@@ -24,14 +26,11 @@ namespace MinesweeperGame
 
         public void Run()
         {
-            OutputMessages.Welcome().Typewrite();
-            // Typewrite class to do this job?
-            // Ambiguity on how this is implemented
-            // We have an object that can output strings to a certain location
-            OutputMessages.HowToPlay.Typewrite();
-            OutputMessages.Instructions.Typewrite();
-            OutputMessages.GridGenerationOptions.Typewrite();
-            OutputMessages.GridSelection.Typewrite();
+            Typewrite(OutputMessages.Welcome());
+            Typewrite(OutputMessages.HowToPlay);
+            Typewrite(OutputMessages.Instructions);
+            Typewrite(OutputMessages.GridGenerationOptions);
+            Typewrite(OutputMessages.GridSelection);
             var userGridSelection = _textReader.ReadLine();
             // move the user 
             if (userGridSelection == "1")
@@ -60,11 +59,12 @@ namespace MinesweeperGame
             }
             else if (userGridSelection == "2")
             {
-                OutputMessages.EnterNumberOfRows.DisplayMessage();
+                _textWriter.Write(OutputMessages.EnterNumberOfRows);
+                // Could put a sleeo in here
                 var userInputRows = _textReader.ReadLine();
                 _inputValidation.CheckGridDimensions(userInputRows);
                 int.TryParse(userInputRows, out var rows);
-                OutputMessages.EnterNumberOfCols.DisplayMessage();
+                _textWriter.Write(OutputMessages.EnterNumberOfCols);
                 var userInputCols = _textReader.ReadLine();
                 int.TryParse(userInputCols, out var cols);
                 var random2DMineStringArray = new string[3, 3]
@@ -80,14 +80,15 @@ namespace MinesweeperGame
             _grid.InitialiseCells();
             _grid.IncrementNeighbourMinesIfTouchingMines();
             var numberOfMines = _grid.GetCountOfMines();
-            _grid.DisplayGrid();
+            // _textWriter.WriteLine(
+            Console.Write(BuildGrid(_grid));
             while (!_gameOver)
             {
                 // Display grid
-                OutputMessages.CellSelection.DisplayMessage();
+                _textWriter.Write(OutputMessages.CellSelection);
                 var userSelectedLocation = GetCellLocation();
                 var selectedCell = GetSelectedCell(userSelectedLocation);
-                OutputMessages.ListAllCellGuessActions().DisplayMessage();
+                _textWriter.Write(OutputMessages.ListAllCellGuessActions());
                 var userActionResponse = _textReader.ReadLine();
                 if (userActionResponse == "F" && !IsFlagged(userSelectedLocation))
                 {
@@ -102,7 +103,7 @@ namespace MinesweeperGame
                     selectedCell = RevealSelectedCell(userSelectedLocation);
                 }
                     
-                _grid.DisplayGrid();
+                Console.WriteLine(BuildGrid(_grid));
                 if (IsWin(numberOfMines))
                 {
                     EndGame("win");
@@ -121,6 +122,15 @@ namespace MinesweeperGame
             }
         }
 
+        public static void Typewrite(string message)
+        {
+            foreach (var t in message)
+            {
+                _textWriter.Write(t);
+                Thread.Sleep(15);
+            }
+        }
+        
         public void AddFlagToCell(Cell selectedCell)
         {
             selectedCell.IsFlagged = true;
@@ -147,7 +157,7 @@ namespace MinesweeperGame
             while (string.IsNullOrEmpty(userSelectedCellCoords) ||
                    !_inputValidation.IsUserInputValid(userSelectedCellCoords, _grid.Rows, _grid.Cols))
             {
-                OutputMessages.InvalidGuessLocation().DisplayMessage();
+                _textWriter.Write(OutputMessages.InvalidGuessLocation());
                 userSelectedCellCoords = _textReader.ReadLine();
             }
             
@@ -168,11 +178,11 @@ namespace MinesweeperGame
         {
             _gameOver = true;
             SetAllCellsToRevealed();
-            _grid.DisplayGrid();
+           BuildGrid( _grid);
             if(result == "win")
-                OutputMessages.GameOverYouWin.Typewrite();
+                Typewrite(OutputMessages.GameOverYouWin);
             else
-                OutputMessages.GameOverMineSelected.Typewrite();
+                Typewrite(OutputMessages.GameOverMineSelected);
         }
 
         private void ExitGame() => Environment.Exit(0);
