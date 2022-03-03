@@ -11,7 +11,7 @@ namespace IntegrationTests
     public class ApplicationTests
     {
         [Fact]
-        public void Given_RunApplication_WhenGameRuns_Then_PrintsWelcomeAndRules()
+        public void Given_RunApplication_WhenGameRuns_Then_PlayerLoses()
         {
             // Arrange
             var grid = new Grid(3, 3, new string[,]
