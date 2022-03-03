@@ -14,7 +14,7 @@ namespace MinesweeperGameTests
         {
             var grid = new Grid(1, 1, new string[,] {{"."}});
             var testReader = new FakeInput();
-            var testOutput = new FakeWriter();
+            var testOutput = new FakeConsoleOut();
             var game = new Game(grid, testReader, testOutput);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
@@ -29,7 +29,7 @@ namespace MinesweeperGameTests
             var grid = new Grid(1, 1, new string[,] {{"."}});
             grid.InitialiseCells();
             var testReader = new FakeInput();
-            var testWriter = new FakeWriter();
+            var testWriter = new FakeConsoleOut();
             var game = new Game(grid, testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
@@ -50,7 +50,7 @@ namespace MinesweeperGameTests
             });
             grid.InitialiseCells();
             var testReader = new FakeInput();
-            var testWriter = new FakeWriter();
+            var testWriter = new FakeConsoleOut();
             var game = new Game(grid, testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,1"};
             testReader.SetupSequence(userSelectedLocation);
@@ -66,7 +66,7 @@ namespace MinesweeperGameTests
             var grid = new Grid(1, 1, new string[,] {{"*"}});
             grid.InitialiseCells();
             var testReader = new FakeInput();
-            var testWriter = new FakeWriter();
+            var testWriter = new FakeConsoleOut();
             var game = new Game(grid, testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
@@ -84,7 +84,7 @@ namespace MinesweeperGameTests
             var grid = new Grid(1, 1, new string[,] {{"*"}});
             grid.InitialiseCells();
             var testReader = new FakeInput();
-            var testWriter = new FakeWriter();
+            var testWriter = new FakeConsoleOut();
             var game = new Game(grid, testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
