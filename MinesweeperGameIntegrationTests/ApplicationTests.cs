@@ -25,12 +25,11 @@ namespace IntegrationTests
             var fakeConsoleOut = new FakeConsoleOut();
            
             // Act
-            fakeInput.SetupSequence(new List<string> {"1", "0,1", "R" +
-                                                                  "ygit "});
+            fakeInput.SetupSequence(new List<string> {"1", "0,1", "R"});
             var game = new Game(grid, fakeInput, fakeConsoleOut);
             game.Run();
             var output = fakeConsoleOut.GetOutput();
-            // Should use a test spy which is a generic object which would watch a class as it is used.
+            // Could use a test spy which is a generic object which would watch a class as it is used.
             // Testing that the output of the system is what it is supposed to be.
             // Being too granular with my test
             // Don't want to be duplicating strings or text
