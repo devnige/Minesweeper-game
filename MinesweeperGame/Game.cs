@@ -10,11 +10,13 @@ namespace MinesweeperGame
     {
         private Grid _grid;
         private readonly TextReader _textReader;
+
         private static TextWriter _textWriter;
+
         // How would you write to a stream as well as console?
         private bool _gameOver;
         private InputValidation _inputValidation;
-        
+
         public Game(Grid grid, TextReader textReader, TextWriter textWriter)
         {
             _grid = grid;
@@ -75,8 +77,8 @@ namespace MinesweeperGame
                 };
                 _grid = new Grid(rows, cols, random2DMineStringArray);
             }
-            
-            
+
+
             _grid.InitialiseCells();
             _grid.IncrementNeighbourMinesIfTouchingMines();
             var numberOfMines = _grid.GetCountOfMines();
@@ -102,8 +104,8 @@ namespace MinesweeperGame
                 {
                     selectedCell = RevealSelectedCell(userSelectedLocation);
                 }
-                    
-                Console.WriteLine(BuildGrid(_grid));
+
+                _textWriter.WriteLine(BuildGrid(_grid));
                 if (IsWin(numberOfMines))
                 {
                     EndGame("win");
@@ -130,7 +132,7 @@ namespace MinesweeperGame
                 Thread.Sleep(15);
             }
         }
-        
+
         public void AddFlagToCell(Cell selectedCell)
         {
             selectedCell.IsFlagged = true;
@@ -160,7 +162,7 @@ namespace MinesweeperGame
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
                 userSelectedCellCoords = _textReader.ReadLine();
             }
-            
+
             var userSelectedRow = userSelectedCellCoords.Split(',')[0];
             var userSelectCol = userSelectedCellCoords.Split(',')[1];
             int.TryParse(userSelectedRow, out var row);
@@ -172,14 +174,14 @@ namespace MinesweeperGame
             _grid.NumberOfRevealedCells + numberOfMines == _grid.Cols * _grid.Rows;
 
         public bool IsLoss(Cell selectedCell) => selectedCell.CellType == CellType.Mine && selectedCell.IsRevealed;
-        
+
 
         private void EndGame(string result)
         {
             _gameOver = true;
             SetAllCellsToRevealed();
-           BuildGrid( _grid);
-            if(result == "win")
+            _textWriter.Write(BuildGrid(_grid));
+            if (result == "win")
                 Typewrite(OutputMessages.GameOverYouWin);
             else
                 Typewrite(OutputMessages.GameOverMineSelected);

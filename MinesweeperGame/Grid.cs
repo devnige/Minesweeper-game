@@ -155,12 +155,11 @@ namespace MinesweeperGame
         public static string BuildGrid(Grid grid)
         {
             StringBuilder sb = new StringBuilder();
-            // TODO Could move to run method Console.Clear();
-            // Can use string concatenation or stringbuilder
+            // TODO Could move Console.Clear(); to run method 
             sb.Append("   ");
             for (var i = 0; i < grid.Cols; i++)
             {
-                sb.Append($"{i}  ");
+                sb.Append($"{i} ");
             }
             sb.Append(Environment.NewLine);
             sb.Append("   ");

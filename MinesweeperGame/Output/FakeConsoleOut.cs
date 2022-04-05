@@ -7,25 +7,26 @@ namespace MinesweeperGame.Output
     public class FakeConsoleOut : TextWriter
     {
         //public List<string> Output;
-        public StringBuilder StringBuilder;
+        public Dictionary<string, int> writtenStrings = new Dictionary<string, int>();
         
-        public FakeConsoleOut()
-        {
-            //Output = new List<string>();
-            StringBuilder = new StringBuilder();
-        }
-
         public override Encoding Encoding { get; }
-
+        
         public override void Write(string str)
         {
             //Output.Add(str);
-            StringBuilder.Append(str);
+            AddStringToWrittenString(str);
         }
         
-        public string GetOutput()
+        private void AddStringToWrittenString(string writtenString)
         {
-            return StringBuilder.ToString();
+            if (writtenStrings.ContainsKey(writtenString))
+            {
+                writtenStrings[writtenString]++;
+            }
+            else
+            {
+                writtenStrings.Add(writtenString, 1);
+            }
         }
     }
 }
