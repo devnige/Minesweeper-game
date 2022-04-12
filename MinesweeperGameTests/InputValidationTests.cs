@@ -50,7 +50,7 @@ namespace MinesweeperGameTests
         }
         
         [Fact]
-        public void Given_IsUserInputValid_WhenInputContainsANonValidCellLocation_Then_ReturnsTrue()
+        public void Given_IsUserInputValid_WhenInputContainsANonValidCellLocation_Then_ReturnsTFalse()
         {
             FakeInput fakeInput = new FakeInput();
             fakeInput.SetupSequence(new List<string> {"4,4"});

@@ -25,21 +25,22 @@ namespace MinesweeperGame
         public int NumberOfRevealedCells { get; set; }
         
         public Cell[,] Cells;
-        
+
         public void InitialiseCells()
         {
             for (var x = 0; x < Rows; x++)
+            for (var y = 0; y < Cols; y++)
             {
-                for (var y = 0; y < Cols; y++)
-                {
-                    if (InitialStringArray[x, y] == "*")
-                        Cells[x, y] = new Cell(new Location(x, y), 9, CellType.Mine);
-                    else
-                        Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
-                }
-            } 
+                if (InitialStringArray[x, y] == "*")
+                    Cells[x, y] = new Cell(new Location(x, y), 9, CellType.Mine);
+                else
+                    Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
+            }
         }
         
+        
+        
+
         public void IncrementNeighbourMinesIfTouchingMines()
         {
             for (var x = 0; x < Rows; x++)
@@ -58,7 +59,6 @@ namespace MinesweeperGame
                         }
                     }
                 }
-            }
         }
         
         public List<Cell> AddValidNeighboursToList(Cell currentCell)

@@ -77,20 +77,19 @@ namespace MinesweeperGame
                 };
                 _grid = new Grid(rows, cols, random2DMineStringArray);
             }
-
-
+            
             _grid.InitialiseCells();
             _grid.IncrementNeighbourMinesIfTouchingMines();
-            var numberOfMines = _grid.GetCountOfMines();
-            // _textWriter.WriteLine(
             Console.Write(BuildGrid(_grid));
+            
             while (!_gameOver)
             {
                 // Display grid
-                _textWriter.Write(OutputMessages.CellSelection);
+                var message = OutputMessages.CellSelection;
+                _textWriter.Write(message);
                 var userSelectedLocation = GetCellLocation();
                 var selectedCell = GetSelectedCell(userSelectedLocation);
-                var message = selectedCell.IsFlagged
+                message = selectedCell.IsFlagged
                     ? OutputMessages.ListFlaggedCellGuessActions()
                     : OutputMessages.ListUnflaggedCellGuessActions();
                 _textWriter.Write(message);
