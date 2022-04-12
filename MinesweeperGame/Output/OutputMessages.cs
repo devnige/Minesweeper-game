@@ -41,12 +41,18 @@ namespace MinesweeperGame.Output
                                                              "Congratulations! :)" + eNL +
                                                              "GAME OVER";
         
-        public static string ListAllCellGuessActions()
+        public static string ListUnflaggedCellGuessActions()
         {
             return "R = reveal" + Environment.NewLine
                    + "F = flag" + Constants.Down + Environment.NewLine
-                   + "D = deflag" + Environment.NewLine
                    + "Please select an action:";
+        }
+        
+        public static string ListFlaggedCellGuessActions()
+        {
+            return "R = reveal" + Environment.NewLine
+                                + "D = deflag" + Environment.NewLine
+                                + "Please select an action:";
         }
         
         public static string InvalidGuessLocation()

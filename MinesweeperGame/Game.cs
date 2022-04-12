@@ -90,7 +90,10 @@ namespace MinesweeperGame
                 _textWriter.Write(OutputMessages.CellSelection);
                 var userSelectedLocation = GetCellLocation();
                 var selectedCell = GetSelectedCell(userSelectedLocation);
-                _textWriter.Write(OutputMessages.ListAllCellGuessActions());
+                var message = selectedCell.IsFlagged
+                    ? OutputMessages.ListFlaggedCellGuessActions()
+                    : OutputMessages.ListUnflaggedCellGuessActions();
+                _textWriter.Write(message);
                 var userActionResponse = _textReader.ReadLine();
                 if (userActionResponse == "F" && !IsFlagged(userSelectedLocation))
                 {
@@ -106,15 +109,13 @@ namespace MinesweeperGame
                 }
 
                 _textWriter.WriteLine(BuildGrid(_grid));
-                if (IsWin(numberOfMines))
+                if (IsWin())
                 {
                     EndGame("win");
-                    ExitGame();
                 }
                 else if (IsLoss(selectedCell))
                 {
                     EndGame("loss");
-                    ExitGame();
                 }
                 // Cases
                 // The cell selected is covered and a mine is in the cell. Reveal the bomb. Game Over :(
@@ -170,8 +171,8 @@ namespace MinesweeperGame
             return new Location(row, col); // passes but we don't want this
         }
 
-        private bool IsWin(int numberOfMines) =>
-            _grid.NumberOfRevealedCells + numberOfMines == _grid.Cols * _grid.Rows;
+        private bool IsWin() =>
+            _grid.NumberOfRevealedCells + _grid.NumberOfMines == _grid.Cols * _grid.Rows;
 
         public bool IsLoss(Cell selectedCell) => selectedCell.CellType == CellType.Mine && selectedCell.IsRevealed;
 
@@ -183,6 +184,7 @@ namespace MinesweeperGame
             _textWriter.Write(BuildGrid(_grid));
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
             Typewrite(message);
+            ExitGame();
         }
 
         private void ExitGame() => Environment.Exit(0);
