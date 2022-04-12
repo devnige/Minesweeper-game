@@ -181,10 +181,8 @@ namespace MinesweeperGame
             _gameOver = true;
             SetAllCellsToRevealed();
             _textWriter.Write(BuildGrid(_grid));
-            if (result == "win")
-                Typewrite(OutputMessages.GameOverYouWin);
-            else
-                Typewrite(OutputMessages.GameOverMineSelected);
+            var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
+            Typewrite(message);
         }
 
         private void ExitGame() => Environment.Exit(0);
