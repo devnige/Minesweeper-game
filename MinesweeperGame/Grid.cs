@@ -16,7 +16,7 @@ namespace MinesweeperGame
             InitialStringArray = input;
         }
 
-        public string[,] InitialStringArray { get;}
+        private string[,] InitialStringArray { get;}
 
         public int Rows { get; set; }
         public int Cols { get; set; }
@@ -159,7 +159,7 @@ namespace MinesweeperGame
             sb.Append("   ");
             for (var i = 0; i < grid.Cols; i++)
             {
-                sb.Append($"{i} ");
+                sb.Append($"{i}  ");
             }
             sb.Append(Environment.NewLine);
             sb.Append("   ");
