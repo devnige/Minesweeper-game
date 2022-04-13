@@ -171,7 +171,7 @@ namespace MinesweeperGame
         }
 
         private bool IsWin() =>
-            _grid.NumberOfRevealedCells + _grid.NumberOfMines == _grid.Cols * _grid.Rows;
+            _grid.NumberOfRevealedCells + _grid.NumberOfMines == _grid.NumberOfCellsInGrid;
 
         public bool IsLoss(Cell selectedCell) => selectedCell.CellType == CellType.Mine && selectedCell.IsRevealed;
 

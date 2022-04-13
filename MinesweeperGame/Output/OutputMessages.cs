@@ -5,7 +5,7 @@ namespace MinesweeperGame.Output
 {
     public class OutputMessages
     {
-        private static readonly string eNL = Environment.NewLine;
+        protected static readonly string eNL = Environment.NewLine;
         
         public static string Welcome()
         {
