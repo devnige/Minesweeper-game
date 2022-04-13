@@ -133,7 +133,6 @@ namespace MinesweeperGame
                         }
                     }
                 }
-            
                 return NumberOfMines;
             }
         
