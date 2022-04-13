@@ -78,8 +78,8 @@ namespace MinesweeperGame
                 _grid = new Grid(rows, cols, random2DMineStringArray);
             }
             
-            _grid.InitialiseCells();
-            _grid.IncrementNeighbourMinesIfTouchingMines();
+            var mines = _grid.InitialiseCells();
+            _grid.IncrementNeighbourCellsIfTouchingAMine(mines);
             Console.Write(BuildGrid(_grid));
             
             while (!_gameOver)
