@@ -23,40 +23,34 @@ namespace MinesweeperGame
         public int NumberOfMines { get; set; }
         public int NumberOfRevealedCells { get; set; }
         
-        public Cell[,] Cells;
+        public readonly Cell[,] Cells;
 
-        public void InitialiseCells()
+        public List<Cell> InitialiseCells()
         {
+            var mines = new List<Cell>();
             for (var x = 0; x < Rows; x++)
             for (var y = 0; y < Cols; y++)
             {
                 if (InitialStringArray[x, y] == "*")
+                {
                     Cells[x, y] = new Cell(new Location(x, y), 9, CellType.Mine);
+                    mines.Add(Cells[x,y]);
+                }
                 else
                     Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
             }
+            return mines;
         }
-
-
-
-
-        public void IncrementNeighbourMinesIfTouchingMines()
+        
+        public void IncrementNeighbourCellsIfTouchingAMine(List<Cell> mines)
         {
-            for (var x = 0; x < Rows; x++)
+            foreach (var mine in mines)
             {
-                for (var y = 0; y < Cols; y++)
+                var neighbouringCells = AddValidNeighboursToList(mine);
+                foreach (var neighbour in neighbouringCells)
                 {
-                    var currentCell = Cells[x, y];
-                    // if current cell is a mine increment all its neighbours if neighbours are not a mine
-                    if (IsCellAMine(currentCell))
-                    {
-                        var neighbouringCells = AddValidNeighboursToList(currentCell);
-                        foreach (var neighbour in neighbouringCells)
-                        {
-                            if (neighbour.CellType == CellType.NotAMine)
-                                IncrementCellNeighbouringMines(neighbour);
-                        }
-                    }
+                    if (neighbour.CellType == CellType.NotAMine)
+                        IncrementCellNeighbouringMines(neighbour);
                 }
             }
         }
