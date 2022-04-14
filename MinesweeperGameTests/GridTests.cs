@@ -184,8 +184,8 @@ namespace MinesweeperGameTests
                     {".", "*"},
                     {".", "."}
                 });
-            grid.InitialiseCells();
-            grid.IncrementNeighbourMinesIfTouchingMines();
+            var mines = grid.InitialiseCells();
+            grid.IncrementNeighbourCellsIfTouchingAMine(mines);
             var actual00 = grid.Cells[0, 0].NeighbouringMines;
             var expected = 1;
             Assert.Equal(expected, actual00);
@@ -201,8 +201,8 @@ namespace MinesweeperGameTests
                     {".", "*"},
                     {".", "*"}
                 });
-            grid.InitialiseCells();
-            grid.IncrementNeighbourMinesIfTouchingMines();
+            var mines = grid.InitialiseCells();
+            grid.IncrementNeighbourCellsIfTouchingAMine(mines);
             var actual00 = grid.Cells[0, 0].NeighbouringMines;
             var expected = 2;
             Assert.Equal(expected, actual00);
@@ -235,8 +235,8 @@ namespace MinesweeperGameTests
                     {".", "*", "."},
                     {".", "*", "."}
                 });
-            grid.InitialiseCells();
-            grid.IncrementNeighbourMinesIfTouchingMines();
+            var mines = grid.InitialiseCells();
+            grid.IncrementNeighbourCellsIfTouchingAMine(mines);
             var actual = grid.AddValidNeighboursToList(new Cell(new Location(0,1
             ), 9, CellType.Mine));
             var expected = new List<Cell>{new Cell(new Location(0,0), 2, CellType.NotAMine),
