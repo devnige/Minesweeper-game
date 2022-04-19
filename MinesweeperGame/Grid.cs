@@ -57,57 +57,44 @@ namespace MinesweeperGame
         }
 
         public List<Cell> AddValidNeighboursToList(Cell currentCell)
+        {
+            var upperBoundRowLimit = Cells.GetUpperBound(0);
+            var lowerBoundRowLimit = Cells.GetLowerBound(0);
+            var upperBoundColLimit = Cells.GetUpperBound(1);
+            var lowerBoundColLimit = Cells.GetLowerBound(1);
+
+            var currentRow = currentCell.Location.Row;
+            var currentCol = currentCell.Location.Col;
+            var previousRow = currentRow - 1;
+            var nextRow = currentRow + 1;
+            var previousCol = currentCol - 1;
+            var nextCol = currentCol + 1;
+
+            var rowsToCheck = new List<int>();
+            var neighbouringCells = new List<Cell>();
+            // add neighbouring cells to list if in bounds
+            
+            rowsToCheck.Add(currentRow);
+            
+            if(previousRow >= lowerBoundRowLimit)
+                rowsToCheck.Add(previousRow);
+        
+            if(nextRow <= upperBoundRowLimit)
+                rowsToCheck.Add(nextRow);
+
+            foreach (var row in rowsToCheck)
             {
-                var upperBoundRowLimit = Cells.GetUpperBound(0);
-                var lowerBoundRowLimit = Cells.GetLowerBound(0);
-                var upperBoundColLimit = Cells.GetUpperBound(1);
-                var lowerBoundColLimit = Cells.GetLowerBound(1);
-            
-                var neighbouringCells = new List<Cell>();
-                // add neighbouring cells to list if in bounds
-                var isCellPreviousColSameRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit;
-                if (isCellPreviousColSameRowInBounds)
-                    neighbouringCells.Add(Cells[currentCell.Location.Row, currentCell.Location.Col - 1]);
-            
-                var isCellPreviousColPreviousRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit &&
-                                                           currentCell.Location.Row - 1 >= lowerBoundRowLimit;
-                if(isCellPreviousColPreviousRowInBounds)
-                    neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col - 1]);
+                if (previousCol >= lowerBoundColLimit)
+                    neighbouringCells.Add(Cells[row, previousCol]);
 
-                var isCellPreviousColNextRowInBounds = currentCell.Location.Col - 1 >= lowerBoundColLimit &&
-                                                       currentCell.Location.Row + 1 <= upperBoundRowLimit;
-                if(isCellPreviousColNextRowInBounds)
-                    neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col - 1]);
+                if (nextCol <= upperBoundColLimit)
+                    neighbouringCells.Add(Cells[row, nextCol]);
 
-                var isCellNextColSameRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit;
-                if(isCellNextColSameRowInBounds)
-                    neighbouringCells.Add(Cells[currentCell.Location.Row, currentCell.Location.Col + 1]);
-            
-                var isCellNextColPreviousRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit &&
-                                                       currentCell.Location.Row - 1 >= lowerBoundRowLimit;
-                if (isCellNextColPreviousRowInBounds)
-                {
-                    neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col + 1]); // previous row, next col
-                    neighbouringCells.Add(Cells[currentCell.Location.Row - 1, currentCell.Location.Col]); // previous row same col
-                }
-            
-                var isCellNextColNextRowInBounds = currentCell.Location.Col + 1 <= upperBoundColLimit &&
-                                                   currentCell.Location.Row + 1 <= upperBoundRowLimit;
-                if (isCellNextColNextRowInBounds)
-                {
-                    neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col + 1]); // next row, next col
-                    neighbouringCells.Add(Cells[currentCell.Location.Row + 1, currentCell.Location.Col]); // next row, same col
-                }
-                
-            
-                var isCellSameColPreviousRowInBounds = currentCell.Location.Col <= upperBoundColLimit &&
-                                                       currentCell.Location.Row - 1 >= lowerBoundRowLimit;
-                if (isCellSameColPreviousRowInBounds)
-                {
-                
-                }
-                return neighbouringCells;
+                if (row != currentRow)
+                    neighbouringCells.Add(Cells[row, currentCol]);
             }
+            return neighbouringCells;
+        }
 
             private void IncrementCellNeighbouringMines(Cell cell) => cell.NeighbouringMines += 1;
         
