@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Threading;
 using MinesweeperGame.Output;
 using static MinesweeperGame.Grid;
@@ -78,9 +79,8 @@ namespace MinesweeperGame
                 _grid = new Grid(rows, cols, random2DMineStringArray);
             }
             
-            var mines = _grid.InitialiseCells();
-            _grid.IncrementNeighbourCellsIfTouchingAMine(mines);
-            Console.Write(BuildGrid(_grid));
+            InitialiseGrid();
+            PrintGrid();
             
             while (!_gameOver)
             {
@@ -104,10 +104,11 @@ namespace MinesweeperGame
                 }
                 else if (userActionResponse == "R")
                 {
+                    selectedCell.IsFlagged = false;
                     selectedCell = RevealSelectedCell(userSelectedLocation);
                 }
 
-                _textWriter.WriteLine(BuildGrid(_grid));
+                PrintGrid();
                 if (IsWin())
                 {
                     EndGame("win");
@@ -122,6 +123,42 @@ namespace MinesweeperGame
                 // The cell selected is already uncovered - do nothing.
                 // When a player selects a cell with 0 mine neighbours it automatically uncovers all adjacent empty cells and their neighbours
             }
+        }
+
+        private void PrintGrid()
+        {
+            var gridArray = BuildGrid(_grid).ToCharArray();
+            foreach (char c in gridArray)
+            {
+                if (c == '*')
+                {
+                    Console.ForegroundColor = Constants.RevealedCellMine;
+                    _textWriter.Write(c);
+                }
+                else if (c == '\u25fc')
+                {
+                    Console.ForegroundColor = Constants.HiddenCellColour;
+                    _textWriter.Write(c);
+                }
+                else if (c == '\u2690')
+                {
+                    Console.ForegroundColor = Constants.FlaggedCellColour;
+                    _textWriter.Write(c);
+                }
+                else
+                {
+                    Console.ForegroundColor = Constants.RevealedCellNotAMine;
+                    _textWriter.Write(c);
+                }
+            }
+
+            _textWriter.WriteLine();
+        }
+
+        private void InitialiseGrid()
+        {
+            var mines = _grid.InitialiseCells();
+            _grid.IncrementNeighbourCellsIfTouchingAMine(mines);
         }
 
         public static void Typewrite(string message)
@@ -180,7 +217,7 @@ namespace MinesweeperGame
         {
             _gameOver = true;
             SetAllCellsToRevealed();
-            _textWriter.Write(BuildGrid(_grid));
+            PrintGrid();
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
             Typewrite(message);
             ExitGame();
