@@ -29,8 +29,15 @@ namespace MinesweeperGame
 
         public void Run()
         {
-            Typewrite(OutputMessages.Welcome());
-            Typewrite(OutputMessages.HowToPlay);
+            var welcomeMessageArray = OutputMessages.Welcome().ToCharArray();
+            foreach (var c in welcomeMessageArray)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                _textWriter.Write(c);
+            }
+            //Typewrite(_textWriter.ToString());
+            //Typewrite(OutputMessages.Welcome());
+            Console.ResetColor();
             Typewrite(OutputMessages.Instructions);
             Typewrite(OutputMessages.GridGenerationOptions);
             Typewrite(OutputMessages.GridSelection);

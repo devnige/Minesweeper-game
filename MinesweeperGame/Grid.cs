@@ -148,54 +148,27 @@ namespace MinesweeperGame
 
                         if (!currentCell.IsRevealed && !currentCell.IsFlagged)
                         {
-                            SetForegroundColour("hidden");
                             sb.Append(Constants.HiddenCell);
                         }
                     
                         else if (currentCell.IsFlagged)
                         {
-                            SetForegroundColour("is flagged");
                             sb.Append(Constants.FlaggedCell);
                         }
 
                         else if (currentCell.IsRevealed && currentCell.CellType == CellType.NotAMine)
                         {
-                            SetForegroundColour("revealed not a mine");
                             sb.Append(currentCell.NeighbouringMines + Constants.RevealedCell);
                         }
 
                         else if (currentCell.IsRevealed && currentCell.CellType == CellType.Mine)
                         {
-                            SetForegroundColour("revealed is a mine");
                             sb.Append(Constants.MineCell);
                         }
                     }
                     sb.Append(Environment.NewLine);
-                    SetForegroundColour("default");
                 }
                 return sb.ToString(); //string needed
-            }
-        
-            private static void SetForegroundColour(string type)
-            {
-                switch (type)
-                {
-                    case "hidden":
-                        Console.ForegroundColor = Constants.HiddenCellColour;
-                        break;
-                    case "revealed not a mine":
-                        Console.ForegroundColor = Constants.RevealedCellNotAMine;
-                        break;
-                    case "revealed is a mine":
-                        Console.ForegroundColor = Constants.RevealedCellMine;
-                        break;
-                    case "is flagged":
-                        Console.ForegroundColor = Constants.FlaggedCellColour;
-                        break;
-                    case "default":
-                        Console.ForegroundColor = Constants.DefaultTextColour;
-                        break;
-                }
             }
     }
 }

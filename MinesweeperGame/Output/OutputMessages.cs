@@ -9,7 +9,7 @@ namespace MinesweeperGame.Output
         
         public static string Welcome()
         {
-            return "WELCOME TO" + eNL +
+            return eNL + "                              WELCOME TO" + eNL +
                    "   _____  .__" + eNL +
                    "  /     \\ |__| ____   ____   ________  _  __  ____   ____ ______    ____________" + eNL +
                    " /  \\ /  \\|  |/    \\_/ __ \\ /  ___/\\ \\/ \\/ /_/ __ \\_/ __ \\\\  ___ \\_/ __ \\\\_  __ \\" + eNL +
