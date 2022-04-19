@@ -219,7 +219,6 @@ namespace MinesweeperGameTests
                     {".", "*", "."}
                 });
             grid.InitialiseCells();
-            grid.GetCountOfMines();
             var actual = grid.NumberOfMines;
             var expected = 2;
             Assert.Equal(expected, actual);

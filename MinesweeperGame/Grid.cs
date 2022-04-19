@@ -35,6 +35,7 @@ namespace MinesweeperGame
                 {
                     Cells[x, y] = new Cell(new Location(x, y), 9, CellType.Mine);
                     mines.Add(Cells[x,y]);
+                    NumberOfMines++;
                 }
                 else
                     Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
@@ -108,28 +109,6 @@ namespace MinesweeperGame
                 return neighbouringCells;
             }
 
-            private static bool IsCellAMine(Cell currentCell)
-            {
-                return currentCell.CellType == CellType.Mine;
-            }
-        
-            public int GetCountOfMines()
-            {
-                for (var x = 0; x < Rows; x++)
-                {
-                    for (var y = 0; y < Cols; y++)
-                    {
-                        var currentCell = Cells[x, y];
-        
-                        if (currentCell.CellType == CellType.Mine)
-                        {
-                            NumberOfMines += 1;
-                        }
-                    }
-                }
-                return NumberOfMines;
-            }
-        
             private void IncrementCellNeighbouringMines(Cell cell) => cell.NeighbouringMines += 1;
         
             public Cell RevealCell(Location location)
