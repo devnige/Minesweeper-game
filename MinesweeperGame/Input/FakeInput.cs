@@ -8,8 +8,6 @@ namespace MinesweeperGame
     public class FakeInput : TextReader
     {
         private readonly Queue<string> _stringQueue = new Queue<string>();
-        // public readonly Dictionary<string, int> ReadStrings = new Dictionary<string, int>();
-
         
         public void SetupSequence(List<string> someString)
         {
