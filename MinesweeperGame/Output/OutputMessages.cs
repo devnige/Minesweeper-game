@@ -72,5 +72,11 @@ namespace MinesweeperGame.Output
                 $"Invalid input. Please select a grid dimension between {Constants.MinimumGridRowOrColDimension}" +
                 $" and {Constants.MaximumGridRowOrColDimension}";
         }
+
+        public static string InvalidUserAction()
+        {
+            return
+                "Invalid user action. You can (R)eveal, (F)lag or (D)eflag a location on the grid";
+        }
     }
 }

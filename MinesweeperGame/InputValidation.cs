@@ -24,8 +24,18 @@ namespace MinesweeperGame
             }
             return str;
         }
+
+        public string GetValidUserAction(string str)
+        {
+            while (str is not ("R" or "F"))
+            {
+                _output.WriteLine(OutputMessages.InvalidUserAction());
+                str = _input.ReadLine();
+            }
+            return str;
+        }
         
-        public bool IsUserInputValid(string str, int rows, int cols)
+        public bool IsUserCellSelectionValid(string str, int rows, int cols)
         {
             var userSelectedRow = str.Split(',')[0];
             var userSelectCol = str.Split(',')[1];

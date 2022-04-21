@@ -91,15 +91,16 @@ namespace MinesweeperGame
                 : OutputMessages.ListUnflaggedCellGuessActions();
             _textWriter.Write(message);
             var userActionResponse = _textReader.ReadLine();
-            if (userActionResponse == "F" && !IsFlagged(userSelectedLocation))
+            var validUserAction = _inputValidation.GetValidUserAction(userActionResponse);
+            if (validUserAction == "F" && !IsFlagged(userSelectedLocation))
             {
                 AddFlagToCell(selectedCell);
             }
-            else if (userActionResponse == "D" && IsFlagged(userSelectedLocation))
+            else if (validUserAction == "D" && IsFlagged(userSelectedLocation))
             {
                 RemoveFlagFromCell(selectedCell);
             }
-            else if (userActionResponse == "R")
+            else if (validUserAction == "R")
             {
                 RemoveFlagFromCell(selectedCell);
                 selectedCell = RevealCellAtSelectedLocationAndNeighboursIfNotTouchingAMine(userSelectedLocation);
@@ -203,7 +204,7 @@ namespace MinesweeperGame
         {
             // var userSelectedCellCoords = _textReader.ReadLine();
             while (string.IsNullOrEmpty(userSelectedLocation) ||
-                   !_inputValidation.IsUserInputValid(userSelectedLocation, _grid.Rows, _grid.Cols))
+                   !_inputValidation.IsUserCellSelectionValid(userSelectedLocation, _grid.Rows, _grid.Cols))
             {
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
                 userSelectedLocation = _textReader.ReadLine();
