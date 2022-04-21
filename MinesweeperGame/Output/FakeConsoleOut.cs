@@ -13,7 +13,6 @@ namespace MinesweeperGame.Output
         
         public override void Write(string str)
         {
-            //Output.Add(str);
             AddStringToWrittenString(str);
         }
         
