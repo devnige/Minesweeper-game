@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using Castle.Core.Internal;
 using MinesweeperGame.Output;
 
 namespace MinesweeperGame
@@ -27,12 +28,12 @@ namespace MinesweeperGame
 
         public string GetValidUserAction(string str)
         {
-            while (str is not ("R" or "F"))
+            while (str.IsNullOrEmpty() || str?.ToUpper() is not ("R" or "F" or "D"))
             {
                 _output.WriteLine(OutputMessages.InvalidUserAction());
                 str = _input.ReadLine();
             }
-            return str;
+            return str.ToUpper();
         }
         
         public bool IsUserCellLocationInputValid(string str, int rows, int cols)
