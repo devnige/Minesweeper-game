@@ -51,7 +51,7 @@ namespace MinesweeperGameTests
             FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
             fakeInput.SetupSequence(new List<string> {"0,0"});
             InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
-            Assert.True(inputValidation.IsUserInputValid(fakeInput.ReadLine(), 5, 5 ));
+            Assert.True(inputValidation.IsUserCellLocationInputValid(fakeInput.ReadLine(), 5, 5 ));
         }
         
         [Fact]
@@ -61,17 +61,53 @@ namespace MinesweeperGameTests
             FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
             fakeInput.SetupSequence(new List<string> {"11,11"});
             InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
-            Assert.False(inputValidation.IsUserInputValid(fakeInput.ReadLine(), 3, 3));
+            Assert.False(inputValidation.IsUserCellLocationInputValid(fakeInput.ReadLine(), 3, 3));
         }
         
-        // [Fact]
-        // public void Given_IsUserInputValid_WhenInputContainsANonValidCellLocation_Then_ReturnsTFalse()
-        // {
-        //     FakeInput fakeInput = new FakeInput();
-        //     FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
-        //     fakeInput.SetupSequence(new List<string> {"4,4"});
-        //     InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
-        //     Assert.False(inputValidation.IsUserInputValid(fakeInput.ReadLine(), 3, 3));
-        // }
+        [Fact]
+        public void Given_UserGridGenerationInputValid_WhenInputContainsANonValidCharacter_Then_OnlyAcceptsValidCharacter()
+        {
+            FakeInput fakeInput = new FakeInput();
+            FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
+            fakeInput.SetupSequence(new List<string> {"3", "1"});
+            InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
+            var actual = inputValidation.UserGridGenerationInputValid(fakeInput.ReadLine());
+            var expected = "1";
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void Given_GetValidUserAction_WhenInputContainsANonValidCharacter_Then_OnlyAcceptsValidCharacter()
+        {
+            FakeInput fakeInput = new FakeInput();
+            FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
+            fakeInput.SetupSequence(new List<string> {"Z", "R"});
+            InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
+            var actual = inputValidation.GetValidUserAction(fakeInput.ReadLine());
+            var expected = "R";
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void Given_IsUserCellLocationInputValid_WhenInputContainsAValidSelection_Then_ResultIsTrue()
+        {
+            FakeInput fakeInput = new FakeInput();
+            FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
+            fakeInput.SetupSequence(new List<string> {"1,1"});
+            InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
+            var result = inputValidation.IsUserCellLocationInputValid(fakeInput.ReadLine(), 3, 3);
+            Assert.True(result);
+        }
+        
+        [Fact]
+        public void Given_IsUserCellLocationInputValid_WhenInputContainsAnInvalidSelection_Then_ResultIsFalse()
+        {
+            FakeInput fakeInput = new FakeInput();
+            FakeConsoleOut fakeConsoleOut = new FakeConsoleOut();
+            fakeInput.SetupSequence(new List<string> {"3,3"});
+            InputValidation inputValidation = new InputValidation(fakeInput, fakeConsoleOut);
+            var result = inputValidation.IsUserCellLocationInputValid(fakeInput.ReadLine(), 3, 3);
+            Assert.False(result);
+        }
     }
 }

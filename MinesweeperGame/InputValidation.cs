@@ -35,7 +35,7 @@ namespace MinesweeperGame
             return str;
         }
         
-        public bool IsUserCellSelectionValid(string str, int rows, int cols)
+        public bool IsUserCellLocationInputValid(string str, int rows, int cols)
         {
             var userSelectedRow = str.Split(',')[0];
             var userSelectCol = str.Split(',')[1];

@@ -66,7 +66,7 @@ namespace MinesweeperGame
                 var message = OutputMessages.CellSelection;
                 _textWriter.Write(message);
                 var userSelectedLocation = _textReader.ReadLine();
-                var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
+                var userSelectedCellLocation = GetLocation(userSelectedLocation);
                 var selectedCell = GetSelectedCell(userSelectedCellLocation);
                 if (!selectedCell.IsRevealed)
                 {
@@ -200,18 +200,18 @@ namespace MinesweeperGame
                     _grid.RevealCell(neighbour.Location);
         }
 
-        public Location GetCellLocation(string userSelectedLocation)
+        public Location GetLocation(string cellLocation)
         {
             // var userSelectedCellCoords = _textReader.ReadLine();
-            while (string.IsNullOrEmpty(userSelectedLocation) ||
-                   !_inputValidation.IsUserCellSelectionValid(userSelectedLocation, _grid.Rows, _grid.Cols))
+            while (string.IsNullOrEmpty(cellLocation) ||
+                   !_inputValidation.IsUserCellLocationInputValid(cellLocation, _grid.Rows, _grid.Cols))
             {
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
-                userSelectedLocation = _textReader.ReadLine();
+                cellLocation = _textReader.ReadLine();
             }
 
-            var userSelectedRow = userSelectedLocation.Split(',')[0];
-            var userSelectCol = userSelectedLocation.Split(',')[1];
+            var userSelectedRow = cellLocation.Split(',')[0];
+            var userSelectCol = cellLocation.Split(',')[1];
             int.TryParse(userSelectedRow, out var row);
             int.TryParse(userSelectCol, out var col);
             return new Location(row, col); // passes but we don't want this
