@@ -229,7 +229,7 @@ namespace MinesweeperGame
             PrintGrid();
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
             Typewrite(message);
-            // ExitGame();
+            ExitGame();
         }
 
         void ExitGame() => Environment.Exit(0);
