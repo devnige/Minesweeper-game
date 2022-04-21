@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using MinesweeperGame;
 using MinesweeperGame.Output;
 using Xunit;
@@ -12,52 +13,42 @@ namespace MinesweeperGameTests
         [Fact]
         public void Given_RowCell_TurnsIntoAValidLocation()
         {
-            var grid = new Grid(1, 1, new string[,] {{"."}});
+            // var grid = new Grid(1, 1, new string[,] {{"."}});
             var testReader = new FakeInput();
             var testOutput = new FakeConsoleOut();
-            var game = new Game(grid, testReader, testOutput);
-            var userSelectedLocation = new List<string> {"0,0"};
+            var game = new Game(testReader, testOutput);
+            var userSelectedLocation = new List<string> {"1", "0,0", "R"};
             testReader.SetupSequence(userSelectedLocation);
+            game.Run();
             var expected = new Location(0, 0);
-            var actual = game.GetCellLocation();
+            var actual = game.GetCellLocation("0,0");
             Assert.Equal(expected, actual);
         }
         
         [Fact]
         public void Given_ACellLocation_When_SelectedCellIsCoveredAndIsNotAMine_Then_RevealTheValueOfTheCell()
         {
-            var grid = new Grid(1, 1, new string[,] {{"."}});
-            grid.InitialiseCells();
             var testReader = new FakeInput();
             var testWriter = new FakeConsoleOut();
-            var game = new Game(grid, testReader, testWriter);
-            var userSelectedLocation = new List<string> {"0,0"};
+            var game = new Game(testReader, testWriter);
+            var userSelectedLocation = new List<string> {"2", "3", "3", "0,0", "R"};
             testReader.SetupSequence(userSelectedLocation);
-            var location = new Location(0, 0);
-            var selectedCell = game.RevealSelectedCell(location);
-            Assert.True(selectedCell.CellType == CellType.NotAMine);
-            Assert.True(selectedCell.IsRevealed);
+            game.Run();
+            Assert.True(game.GetSelectedCell(new Location(0,0)).IsRevealed);
         }
         
         [Fact]
-        public void Given_ACellLocation_When_Selected_Then_CellIsRevealedIsTrue()
+        public void Given_AGame_When_UserSelectsRandomGrid_Then_UserCanFlagACell()
         {
-            var grid = new Grid(3, 3, new string[,]
-            {
-                {"." ,".", "."},
-                {".", ".", "."},
-                {".", ".", "."}
-            });
-            grid.InitialiseCells();
             var testReader = new FakeInput();
             var testWriter = new FakeConsoleOut();
-            var game = new Game(grid, testReader, testWriter);
-            var userSelectedLocation = new List<string> {"0,1"};
+            var game = new Game(testReader, testWriter);
+            var userSelectedLocation = new List<string> {
+                "1", "0,0", "F"};
             testReader.SetupSequence(userSelectedLocation);
-            var selectedCellLocation = game.GetCellLocation();
-            var selectedCell = game.GetSelectedCell(selectedCellLocation);
-            game.RevealSelectedCell(selectedCellLocation);
-            Assert.True(selectedCell.IsRevealed);
+            game.Run();
+            //TODO assert that the game finished with a win or a loss
+            
         }
         
         [Fact]
@@ -67,10 +58,10 @@ namespace MinesweeperGameTests
             grid.InitialiseCells();
             var testReader = new FakeInput();
             var testWriter = new FakeConsoleOut();
-            var game = new Game(grid, testReader, testWriter);
+            var game = new Game(testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
-            var selectedCellLocation = game.GetCellLocation();
+            var selectedCellLocation = game.GetCellLocation(TODO);
             var selectedCell = game.GetSelectedCell(selectedCellLocation);
             game.RevealSelectedCell(selectedCellLocation);
             var actual = game.IsLoss(selectedCell);
@@ -85,10 +76,10 @@ namespace MinesweeperGameTests
             grid.InitialiseCells();
             var testReader = new FakeInput();
             var testWriter = new FakeConsoleOut();
-            var game = new Game(grid, testReader, testWriter);
+            var game = new Game(testReader, testWriter);
             var userSelectedLocation = new List<string> {"0,0"};
             testReader.SetupSequence(userSelectedLocation);
-            var selectedCellLocation = game.GetCellLocation();
+            var selectedCellLocation = game.GetCellLocation(TODO);
             var selectedCell = game.GetSelectedCell(selectedCellLocation);
             game.AddFlagToCell(selectedCell);
             Assert.True(selectedCell.IsFlagged);
