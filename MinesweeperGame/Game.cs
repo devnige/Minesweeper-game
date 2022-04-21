@@ -34,13 +34,14 @@ namespace MinesweeperGame
             Typewrite(OutputMessages.GridGenerationOptions);
             Typewrite(OutputMessages.GridSelection);
             var userGridSelection = _textReader.ReadLine();
-            if (userGridSelection == "1")
+            var validGridSelection = _inputValidation.UserGridGenerationInputValid(userGridSelection);
+            if (validGridSelection == "1")
             {
                 Random rnd = new Random();
                 _rows = rnd.Next(3, 11);
                 _cols = rnd.Next(3, 11);
             }
-            else if (userGridSelection == "2")
+            else if (validGridSelection == "2")
             {
                 _textWriter.Write(OutputMessages.EnterNumberOfRows);
                 var userInputRows = _textReader.ReadLine();

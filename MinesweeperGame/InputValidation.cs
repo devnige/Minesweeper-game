@@ -14,6 +14,17 @@ namespace MinesweeperGame
             _input = textReader;
             _output = textWriter;
         }
+
+        public string UserGridGenerationInputValid(string str)
+        {
+            while (str is not ("1" or "2"))
+            {
+                _output.WriteLine(OutputMessages.InvalidGridSelection());
+                str = _input.ReadLine();
+            }
+            return str;
+        }
+        
         public bool IsUserInputValid(string str, int rows, int cols)
         {
             var userSelectedRow = str.Split(',')[0];

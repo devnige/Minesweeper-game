@@ -60,7 +60,12 @@ namespace MinesweeperGame.Output
             return
                 $"Invalid input. Please select a cell location that is on the grid." + eNL;
         }
-        
+
+        public static string InvalidGridSelection()
+        {
+            return
+                "Invalid input. Please select 1 for a random grid or 2 for a custom grid";
+        }
         public static string InvalidGridDimension()
         {
             return
