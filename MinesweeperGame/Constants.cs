@@ -16,7 +16,7 @@ namespace MinesweeperGame
         public const string YesResponse = "y";
         public const string NoResponse = "n";
         
-        public const int MinimumGridRowOrColDimension = 2;
+        public const int MinimumGridRowOrColDimension = 1;
         public const int MaximumGridRowOrColDimension = 10;
 
         // Cell display symbols
