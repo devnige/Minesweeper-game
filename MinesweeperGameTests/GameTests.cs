@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using FluentAssertions;
 using MinesweeperGame;
 using MinesweeperGame.Output;
 using Moq;
@@ -13,87 +9,25 @@ namespace MinesweeperGameTests
     public class GameTests
     {
         [Fact]
-        public void Given_ACellLocation_When_ACoveredMineCellIsFlagged_Then_IsFlaggedIsTrue()
+        public void Given_Run_When_UserInputSelectsAMineLocation_Then_TheGameEndsWithGameOverMineSelectedOutputMessage()
         {
             var mockRandomMineGenerator = new Mock<RandomMineGenerator>();
             mockRandomMineGenerator.Setup(mk =>
                 mk.GenerateRandomMinesAndNonMines()).Returns(
                 new [,]
                     {
-                        {".", ".", "*"},
-                        {".", ".", "."},
-                        {".", ".", "."}
+                        {".", ".", "*", "."},
+                        {".", ".", ".", "."},
+                        {".", ".", ".", "."},
+                        {".", ".", ".", "."}
                     });
-            var testReader = new FakeInput();
-            var testOutput = new FakeConsoleOut();
-            var game = new Game(testReader, testOutput);
-            var userInputs = new List<string> {"2", "3", "3", "0,2", "R"};
-            testReader.SetupSequence(userInputs);
-            game.Run();
-            var expected = OutputMessages.GameOverMineSelected;
-            var actual = testOutput.writtenStrings.First().Key;
-            Assert.Equal(expected, actual);
+            var fakeInput = new FakeInput();
+            var fakeConsoleOut = new FakeConsoleOut();
+            var game = new Game(fakeInput, fakeConsoleOut);
+            fakeInput.SetupSequence(new List<string> {"2", "4", "4", "0,2", "R"}); // enqueue
+            game.Run(); // dequeue 1 = "2", 2 = "4", 3 = "4", 4 = "0,2", 5 = "R"
+            var loseKey = OutputMessages.GameOverMineSelected;
+            Assert.True(fakeConsoleOut.writtenStrings.ContainsKey(loseKey));
         }
-        
-        //
-        // [Fact]
-        // public void Given_ACellLocation_When_SelectedCellIsCoveredAndIsNotAMine_Then_RevealTheValueOfTheCell()
-        // {
-        //     var testReader = new FakeInput();
-        //     var testWriter = new FakeConsoleOut();
-        //     var game = new Game(testReader, testWriter);
-        //     var userSelectedLocation = new List<string> {"2", "3", "3", "0,0", "R"};
-        //     testReader.SetupSequence(userSelectedLocation);
-        //     game.Run();
-        //     Assert.True(game.GetSelectedCell(new Location(0,0)).IsRevealed);
-        // }
-        //
-        // [Fact]
-        // public void Given_AGame_When_UserSelectsRandomGrid_Then_UserCanFlagACell()
-        // {
-        //     var testReader = new FakeInput();
-        //     var testWriter = new FakeConsoleOut();
-        //     var game = new Game(testReader, testWriter);
-        //     var userSelectedLocation = new List<string> {
-        //         "1", "0,0", "F"};
-        //     testReader.SetupSequence(userSelectedLocation);
-        //     game.Run();
-        //     //TODO assert that the game finished with a win or a loss
-        //     
-        // }
-        //
-        // [Fact]
-        // public void Given_ACellLocation_When_SelectedACoveredMineCellIsSelected_Then_IsLossIsTrue()
-        // {
-        //     var grid = new Grid(1, 1, new string[,] {{"*"}});
-        //     grid.InitialiseCells();
-        //     var testReader = new FakeInput();
-        //     var testWriter = new FakeConsoleOut();
-        //     var game = new Game(testReader, testWriter);
-        //     var userSelectedLocation = new List<string> {"0,0"};
-        //     testReader.SetupSequence(userSelectedLocation);
-        //     var selectedCellLocation = game.GetCellLocation(TODO);
-        //     var selectedCell = game.GetSelectedCell(selectedCellLocation);
-        //     game.RevealSelectedCell(selectedCellLocation);
-        //     var actual = game.IsLoss(selectedCell);
-        //     Assert.True(selectedCell.CellType == CellType.Mine);
-        //     Assert.True(selectedCell.IsRevealed);
-        //     Assert.True(actual);
-        // }
-        //
-        // [Fact] public void Given_ACellLocation_When_ACoveredMineCellIsFlagged_Then_IsFlaggedIsTrue()
-        // {
-        //     var grid = new Grid(1, 1, new string[,] {{"*"}});
-        //     grid.InitialiseCells();
-        //     var testReader = new FakeInput();
-        //     var testWriter = new FakeConsoleOut();
-        //     var game = new Game(testReader, testWriter);
-        //     var userSelectedLocation = new List<string> {"0,0"};
-        //     testReader.SetupSequence(userSelectedLocation);
-        //     var selectedCellLocation = game.GetCellLocation(TODO);
-        //     var selectedCell = game.GetSelectedCell(selectedCellLocation);
-        //     game.AddFlagToCell(selectedCell);
-        //     Assert.True(selectedCell.IsFlagged);
-        // }
     }
 }
