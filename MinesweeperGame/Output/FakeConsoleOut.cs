@@ -16,15 +16,15 @@ namespace MinesweeperGame.Output
             AddStringToWrittenString(str);
         }
         
-        private void AddStringToWrittenString(string writtenString)
+        private void AddStringToWrittenString(string str)
         {
-            if (writtenStrings.ContainsKey(writtenString))
+            if (writtenStrings.ContainsKey(str))
             {
-                writtenStrings[writtenString]++;
+                writtenStrings[str]++;
             }
             else
             {
-                writtenStrings.Add(writtenString, 1);
+                writtenStrings.Add(str, 1);
             }
         }
     }
