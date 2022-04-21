@@ -8,9 +8,11 @@ namespace MinesweeperGame
     public class InputValidation
     {
         private TextReader _input;
-        public InputValidation(TextReader textReader)
+        private TextWriter _output;
+        public InputValidation(TextReader textReader, TextWriter textWriter)
         {
             _input = textReader;
+            _output = textWriter;
         }
         public bool IsUserInputValid(string str, int rows, int cols)
         {
@@ -29,6 +31,7 @@ namespace MinesweeperGame
             var number = result;
             while ((number is < Constants.MinimumGridRowOrColDimension or > Constants.MaximumGridRowOrColDimension))
             {
+                _output.WriteLine(OutputMessages.InvalidGridDimension());
                 var newInput = _input.ReadLine();
                 int.TryParse(newInput, out int result2);
                 number = result2;

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Threading;
 using MinesweeperGame.Output;
 using static MinesweeperGame.Grid;
@@ -11,110 +10,67 @@ namespace MinesweeperGame
     {
         private Grid _grid;
         private readonly TextReader _textReader;
-
         private static TextWriter _textWriter;
 
         // How would you write to a stream as well as console?
         private bool _gameOver;
-        private InputValidation _inputValidation;
+        private readonly InputValidation _inputValidation;
+        private int _rows;
+        private int _cols;
 
-        public Game(Grid grid, TextReader textReader, TextWriter textWriter)
+        public Game(TextReader textReader, TextWriter textWriter)
         {
-            _grid = grid;
             _textReader = textReader;
             _textWriter = textWriter;
-            _inputValidation = new InputValidation(textReader);
-            // instantiate Typewriter here
+            _inputValidation = new InputValidation(textReader, textWriter);
         }
 
         public void Run()
         {
-            var welcomeMessageArray = OutputMessages.Welcome().ToCharArray();
-            foreach (var c in welcomeMessageArray)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                _textWriter.Write(c);
-            }
-            //Typewrite(_textWriter.ToString());
-            //Typewrite(OutputMessages.Welcome());
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Typewrite(OutputMessages.Welcome());
             Console.ResetColor();
             Typewrite(OutputMessages.Instructions);
             Typewrite(OutputMessages.GridGenerationOptions);
             Typewrite(OutputMessages.GridSelection);
             var userGridSelection = _textReader.ReadLine();
-            // move the user 
             if (userGridSelection == "1")
             {
-                _grid = new Grid(3, 3, new string[,]
-                    {
-                        {".", "*", "."},
-                        {".", ".", "."},
-                        {".", ".", "."}
-                    }
-                );
-                //
-                // _grid = new Grid(9, 9, new string[,]
-                //     {
-                //         {".", "*", ".", ".", ".", ".", ".", ".", "."},
-                //         {".", ".", ".", ".", "*", ".", ".", "*", "."},
-                //         {".", ".", ".", "*", "*", ".", ".", "*", "."},
-                //         {".", "*", ".", ".", ".", ".", ".", ".", "."},
-                //         {".", ".", ".", "*", ".", "*", ".", ".", "."},
-                //         {".", ".", ".", ".", ".", ".", ".", ".", "."},
-                //         {"*", ".", "*", "*", ".", ".", ".", "*", "."},
-                //         {".", ".", ".", "*", "*", ".", ".", "*", "."},
-                //         {".", ".", ".", "*", "*", ".", ".", "*", "."}
-                //     }
-                // );
+                Random rnd = new Random();
+                _rows = rnd.Next(3, 11);
+                _cols = rnd.Next(3, 11);
             }
             else if (userGridSelection == "2")
             {
                 _textWriter.Write(OutputMessages.EnterNumberOfRows);
-                // Could put a sleeo in here
                 var userInputRows = _textReader.ReadLine();
-                _inputValidation.CheckGridDimensions(userInputRows);
-                int.TryParse(userInputRows, out var rows);
+                _rows = _inputValidation.CheckGridDimensions(userInputRows);
                 _textWriter.Write(OutputMessages.EnterNumberOfCols);
                 var userInputCols = _textReader.ReadLine();
-                int.TryParse(userInputCols, out var cols);
-                var random2DMineStringArray = new string[3, 3]
-                {
-                    {".", ".", "."},
-                    {".", ".", "."},
-                    {".", ".", "."}
-                };
-                _grid = new Grid(rows, cols, random2DMineStringArray);
+               _cols = _inputValidation.CheckGridDimensions(userInputCols);
             }
-            
+
+            _grid = Generate2DStringGrid(_rows, _cols);
             InitialiseGrid();
             PrintGrid();
-            
+
+// Cases
+// The cell selected is covered and a mine is in the cell. Reveal the bomb. Game Over :(
+// The cell selected is covered and a number is in the cell. Reveal the number.
+// The cell selected is already uncovered - do nothing.
+// When a player selects a cell with 0 mine neighbours it automatically uncovers all adjacent empty cells and their neighbours
+
             while (!_gameOver)
             {
-                // Display grid
                 var message = OutputMessages.CellSelection;
                 _textWriter.Write(message);
-                var userSelectedLocation = GetCellLocation();
-                var selectedCell = GetSelectedCell(userSelectedLocation);
-                message = selectedCell.IsFlagged
-                    ? OutputMessages.ListFlaggedCellGuessActions()
-                    : OutputMessages.ListUnflaggedCellGuessActions();
-                _textWriter.Write(message);
-                var userActionResponse = _textReader.ReadLine();
-                if (userActionResponse == "F" && !IsFlagged(userSelectedLocation))
+                var userSelectedLocation = _textReader.ReadLine();
+                var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
+                var selectedCell = GetSelectedCell(userSelectedCellLocation);
+                if (!selectedCell.IsRevealed)
                 {
-                    AddFlagToCell(selectedCell);
+                    GetUserInputAndAdjustCellVisibility(selectedCell, userSelectedCellLocation);
                 }
-                else if (userActionResponse == "D" && IsFlagged(userSelectedLocation))
-                {
-                    selectedCell.IsFlagged = false;
-                }
-                else if (userActionResponse == "R")
-                {
-                    selectedCell.IsFlagged = false;
-                    selectedCell = RevealSelectedCell(userSelectedLocation);
-                }
-
                 PrintGrid();
                 if (IsWin())
                 {
@@ -124,51 +80,38 @@ namespace MinesweeperGame
                 {
                     EndGame("loss");
                 }
-                // Cases
-                // The cell selected is covered and a mine is in the cell. Reveal the bomb. Game Over :(
-                // The cell selected is covered and a number is in the cell. Reveal the number.
-                // The cell selected is already uncovered - do nothing.
-                // When a player selects a cell with 0 mine neighbours it automatically uncovers all adjacent empty cells and their neighbours
             }
         }
 
-        private void PrintGrid()
+        private Cell GetUserInputAndAdjustCellVisibility(Cell selectedCell, Location userSelectedLocation)
         {
-            var gridArray = BuildGrid(_grid).ToCharArray();
-            foreach (char c in gridArray)
+            string message = selectedCell.IsFlagged
+                ? OutputMessages.ListFlaggedCellGuessActions()
+                : OutputMessages.ListUnflaggedCellGuessActions();
+            _textWriter.Write(message);
+            var userActionResponse = _textReader.ReadLine();
+            if (userActionResponse == "F" && !IsFlagged(userSelectedLocation))
             {
-                if (c == '*')
-                {
-                    Console.ForegroundColor = Constants.RevealedCellMine;
-                    _textWriter.Write(c);
-                }
-                else if (c == '\u25fc')
-                {
-                    Console.ForegroundColor = Constants.HiddenCellColour;
-                    _textWriter.Write(c);
-                }
-                else if (c == '\u2690')
-                {
-                    Console.ForegroundColor = Constants.FlaggedCellColour;
-                    _textWriter.Write(c);
-                }
-                else
-                {
-                    Console.ForegroundColor = Constants.RevealedCellNotAMine;
-                    _textWriter.Write(c);
-                }
+                AddFlagToCell(selectedCell);
             }
-
-            _textWriter.WriteLine();
+            else if (userActionResponse == "D" && IsFlagged(userSelectedLocation))
+            {
+                RemoveFlagFromCell(selectedCell);
+            }
+            else if (userActionResponse == "R")
+            {
+                RemoveFlagFromCell(selectedCell);
+                selectedCell = RevealCellAtSelectedLocationAndNeighboursIfNotTouchingAMine(userSelectedLocation);
+            }
+            return selectedCell;
         }
 
-        private void InitialiseGrid()
+        private static void RemoveFlagFromCell(Cell selectedCell)
         {
-            var mines = _grid.InitialiseCells();
-            _grid.IncrementNeighbourCellsIfTouchingAMine(mines);
+            selectedCell.IsFlagged = false;
         }
 
-        public static void Typewrite(string message)
+        private static void Typewrite(string message)
         {
             foreach (var t in message)
             {
@@ -176,8 +119,55 @@ namespace MinesweeperGame
                 Thread.Sleep(15);
             }
         }
+        private static Grid Generate2DStringGrid(int rows, int cols)
+        {
+            var randomMineGenerator = new RandomMineGenerator(rows, cols);
+            var random2DMineStringArray = randomMineGenerator.GenerateRandomMinesAndNonMines();
+            return new Grid(rows, cols, random2DMineStringArray);
+        }
+        void PrintGrid()
+        {
+            Console.Clear();
+            var gridArray = BuildGrid(_grid).ToCharArray();
+            foreach (char c in gridArray)
+            {
+                SetTextColourDependingOnCharacter(c);
+            }
+            _textWriter.WriteLine();
+        }
 
-        public void AddFlagToCell(Cell selectedCell)
+        private static void SetTextColourDependingOnCharacter(char c)
+        {
+            if (c == '*')
+            {
+                Console.ForegroundColor = Constants.RevealedCellMine;
+                _textWriter.Write(c);
+            }
+            else if (c == '\u25fc')
+            {
+                Console.ForegroundColor = Constants.HiddenCellColour;
+                _textWriter.Write(c);
+            }
+            else if (c == '\u2690')
+            {
+                Console.ForegroundColor = Constants.FlaggedCellColour;
+                _textWriter.Write(c);
+            }
+            else
+            {
+                Console.ForegroundColor = Constants.RevealedCellNotAMine;
+                _textWriter.Write(c);
+            }
+        }
+
+
+        void InitialiseGrid()
+        {
+            var mines = _grid.InitialiseCells();
+            _grid.IncrementNeighbourCellsIfTouchingAMine(mines);
+        }
+
+        void AddFlagToCell(Cell selectedCell)
         {
             selectedCell.IsFlagged = true;
         }
@@ -187,40 +177,51 @@ namespace MinesweeperGame
             return _grid.Cells[location.Row, location.Col];
         }
 
-        public bool IsFlagged(Location location)
+        private bool IsFlagged(Location location)
         {
             return _grid.Cells[location.Row, location.Col].IsFlagged;
         }
 
-        public Cell RevealSelectedCell(Location location)
+        Cell RevealCellAtSelectedLocationAndNeighboursIfNotTouchingAMine(Location location)
         {
-            return _grid.RevealCell(location);
+            var selectedCell = _grid.RevealCell(location);
+            if(selectedCell.NeighbouringMines == 0)
+                RevealNeighbouringCellsIfNotTouchingAMine(selectedCell);
+            return selectedCell;
         }
 
-        public Location GetCellLocation()
+        private void RevealNeighbouringCellsIfNotTouchingAMine(Cell selectedCell)
         {
-            var userSelectedCellCoords = _textReader.ReadLine();
-            while (string.IsNullOrEmpty(userSelectedCellCoords) ||
-                   !_inputValidation.IsUserInputValid(userSelectedCellCoords, _grid.Rows, _grid.Cols))
+            var neighbouringCells = _grid.AddValidNeighboursToList(selectedCell);
+            foreach (var neighbour in neighbouringCells)
+                if (neighbour.NeighbouringMines == 0)
+                    _grid.RevealCell(neighbour.Location);
+        }
+
+        public Location GetCellLocation(string userSelectedLocation)
+        {
+            // var userSelectedCellCoords = _textReader.ReadLine();
+            while (string.IsNullOrEmpty(userSelectedLocation) ||
+                   !_inputValidation.IsUserInputValid(userSelectedLocation, _grid.Rows, _grid.Cols))
             {
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
-                userSelectedCellCoords = _textReader.ReadLine();
+                userSelectedLocation = _textReader.ReadLine();
             }
 
-            var userSelectedRow = userSelectedCellCoords.Split(',')[0];
-            var userSelectCol = userSelectedCellCoords.Split(',')[1];
+            var userSelectedRow = userSelectedLocation.Split(',')[0];
+            var userSelectCol = userSelectedLocation.Split(',')[1];
             int.TryParse(userSelectedRow, out var row);
             int.TryParse(userSelectCol, out var col);
             return new Location(row, col); // passes but we don't want this
         }
 
-        private bool IsWin() =>
+        bool IsWin() =>
             _grid.NumberOfRevealedCells + _grid.NumberOfMines == _grid.NumberOfCellsInGrid;
 
-        public bool IsLoss(Cell selectedCell) => selectedCell.CellType == CellType.Mine && selectedCell.IsRevealed;
+        bool IsLoss(Cell selectedCell) => selectedCell.CellType == CellType.Mine && selectedCell.IsRevealed;
 
 
-        private void EndGame(string result)
+        void EndGame(string result)
         {
             _gameOver = true;
             SetAllCellsToRevealed();
@@ -230,9 +231,9 @@ namespace MinesweeperGame
             ExitGame();
         }
 
-        private void ExitGame() => Environment.Exit(0);
+        void ExitGame() => Environment.Exit(0);
 
-        private void SetAllCellsToRevealed()
+        void SetAllCellsToRevealed()
         {
             foreach (var c in _grid.Cells)
             {

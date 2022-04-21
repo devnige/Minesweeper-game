@@ -58,14 +58,14 @@ namespace MinesweeperGame.Output
         public static string InvalidGuessLocation()
         {
             return
-                $"Invalid input. Please select a cell location that is on the grid.";
+                $"Invalid input. Please select a cell location that is on the grid." + eNL;
         }
         
         public static string InvalidGridDimension()
         {
             return
                 $"Invalid input. Please select a grid dimension between {Constants.MinimumGridRowOrColDimension}" +
-                $"and {Constants.MaximumGridRowOrColDimension}";
+                $" and {Constants.MaximumGridRowOrColDimension}";
         }
     }
 }
