@@ -33,7 +33,7 @@ namespace MinesweeperGame
             Typewrite(OutputMessages.Instructions);
             Typewrite(OutputMessages.GridGenerationOptions);
             Typewrite(OutputMessages.GridSelection);
-            var userGridSelection = _textReader.ReadLine();
+            var userGridSelection = _textReader.ReadLine(); //dequeue 1
             var validGridSelection = _inputValidation.UserGridGenerationInputValid(userGridSelection);
             if (validGridSelection == "1")
             {
@@ -44,11 +44,11 @@ namespace MinesweeperGame
             else if (validGridSelection == "2")
             {
                 _textWriter.Write(OutputMessages.EnterNumberOfRows);
-                var userInputRows = _textReader.ReadLine();
+                var userInputRows = _textReader.ReadLine(); // dequeue 2
                 _rows = _inputValidation.CheckGridDimensions(userInputRows);
                 _textWriter.Write(OutputMessages.EnterNumberOfCols);
-                var userInputCols = _textReader.ReadLine();
-               _cols = _inputValidation.CheckGridDimensions(userInputCols);
+                var userInputCols = _textReader.ReadLine(); // dequeue 3
+                _cols = _inputValidation.CheckGridDimensions(userInputCols);
             }
 
             _grid = Generate2DStringGrid(_rows, _cols);
@@ -65,7 +65,7 @@ namespace MinesweeperGame
             {
                 var message = OutputMessages.CellSelection;
                 _textWriter.Write(message);
-                var userSelectedLocation = _textReader.ReadLine();
+                var userSelectedLocation = _textReader.ReadLine(); // dequeue 4
                 var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
                 var selectedCell = GetSelectedCell(userSelectedCellLocation);
                 if (!selectedCell.IsRevealed)
@@ -90,7 +90,7 @@ namespace MinesweeperGame
                 ? OutputMessages.ListFlaggedCellGuessActions()
                 : OutputMessages.ListUnflaggedCellGuessActions();
             _textWriter.Write(message);
-            var userActionResponse = _textReader.ReadLine();
+            var userActionResponse = _textReader.ReadLine(); // dequeue 5
             var validUserAction = _inputValidation.GetValidUserAction(userActionResponse);
             if (validUserAction == "F" && !IsFlagged(userSelectedLocation))
             {
@@ -174,7 +174,7 @@ namespace MinesweeperGame
             selectedCell.IsFlagged = true;
         }
 
-        public Cell GetSelectedCell(Location location)
+        private Cell GetSelectedCell(Location location)
         {
             return _grid.Cells[location.Row, location.Col];
         }
@@ -200,10 +200,10 @@ namespace MinesweeperGame
                     _grid.RevealCell(neighbour.Location);
         }
 
-        public Location GetCellLocation(string cellLocation)
+        private Location GetCellLocation(string cellLocation)
         {
            while (string.IsNullOrEmpty(cellLocation) ||
-                   !_inputValidation.IsUserCellLocationInputValid(cellLocation, _grid.Rows, _grid.Cols))
+                   !_inputValidation.IsUserCellLocationInputValid(cellLocation, _rows, _cols))
             {
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
                 cellLocation = _textReader.ReadLine();
