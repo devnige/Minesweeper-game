@@ -1,29 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using FluentAssertions;
 using MinesweeperGame;
 using MinesweeperGame.Output;
+using Moq;
 using Xunit;
 
 namespace MinesweeperGameTests
 {
     public class GameTests
     {
-        // //The cell selected is covered and a mine is in the cell. Reveal the bomb. Game Over :(
-        // [Fact]
-        // public void Given_RowCell_TurnsIntoAValidLocation()
-        // {
-        //     // var grid = new Grid(1, 1, new string[,] {{"."}});
-        //     var testReader = new FakeInput();
-        //     var testOutput = new FakeConsoleOut();
-        //     var game = new Game(testReader, testOutput);
-        //     var userSelectedLocation = new List<string> {"1", "0,0", "R"};
-        //     testReader.SetupSequence(userSelectedLocation);
-        //     game.Run();
-        //     var expected = new Location(0, 0);
-        //     var actual = game.GetLocation("0,0");
-        //     Assert.Equal(expected, actual);
-        // }
+        [Fact]
+        public void Given_ACellLocation_When_ACoveredMineCellIsFlagged_Then_IsFlaggedIsTrue()
+        {
+            var mockRandomMineGenerator = new Mock<RandomMineGenerator>();
+            mockRandomMineGenerator.Setup(mk =>
+                mk.GenerateRandomMinesAndNonMines()).Returns(
+                new [,]
+                    {
+                        {".", ".", "*"},
+                        {".", ".", "."},
+                        {".", ".", "."}
+                    });
+            var testReader = new FakeInput();
+            var testOutput = new FakeConsoleOut();
+            var game = new Game(testReader, testOutput);
+            var userInputs = new List<string> {"2", "3", "3", "0,2", "R"};
+            testReader.SetupSequence(userInputs);
+            game.Run();
+            var expected = OutputMessages.GameOverMineSelected;
+            var actual = testOutput.writtenStrings.First().Key;
+            Assert.Equal(expected, actual);
+        }
+        
         //
         // [Fact]
         // public void Given_ACellLocation_When_SelectedCellIsCoveredAndIsNotAMine_Then_RevealTheValueOfTheCell()
@@ -61,7 +72,7 @@ namespace MinesweeperGameTests
         //     var game = new Game(testReader, testWriter);
         //     var userSelectedLocation = new List<string> {"0,0"};
         //     testReader.SetupSequence(userSelectedLocation);
-        //     var selectedCellLocation = game.GetLocation(TODO);
+        //     var selectedCellLocation = game.GetCellLocation(TODO);
         //     var selectedCell = game.GetSelectedCell(selectedCellLocation);
         //     game.RevealSelectedCell(selectedCellLocation);
         //     var actual = game.IsLoss(selectedCell);
@@ -79,7 +90,7 @@ namespace MinesweeperGameTests
         //     var game = new Game(testReader, testWriter);
         //     var userSelectedLocation = new List<string> {"0,0"};
         //     testReader.SetupSequence(userSelectedLocation);
-        //     var selectedCellLocation = game.GetLocation(TODO);
+        //     var selectedCellLocation = game.GetCellLocation(TODO);
         //     var selectedCell = game.GetSelectedCell(selectedCellLocation);
         //     game.AddFlagToCell(selectedCell);
         //     Assert.True(selectedCell.IsFlagged);

@@ -66,7 +66,7 @@ namespace MinesweeperGame
                 var message = OutputMessages.CellSelection;
                 _textWriter.Write(message);
                 var userSelectedLocation = _textReader.ReadLine();
-                var userSelectedCellLocation = GetLocation(userSelectedLocation);
+                var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
                 var selectedCell = GetSelectedCell(userSelectedCellLocation);
                 if (!selectedCell.IsRevealed)
                 {
@@ -200,10 +200,9 @@ namespace MinesweeperGame
                     _grid.RevealCell(neighbour.Location);
         }
 
-        public Location GetLocation(string cellLocation)
+        public Location GetCellLocation(string cellLocation)
         {
-            // var userSelectedCellCoords = _textReader.ReadLine();
-            while (string.IsNullOrEmpty(cellLocation) ||
+           while (string.IsNullOrEmpty(cellLocation) ||
                    !_inputValidation.IsUserCellLocationInputValid(cellLocation, _grid.Rows, _grid.Cols))
             {
                 _textWriter.Write(OutputMessages.InvalidGuessLocation());
@@ -230,7 +229,7 @@ namespace MinesweeperGame
             PrintGrid();
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
             Typewrite(message);
-            ExitGame();
+            // ExitGame();
         }
 
         void ExitGame() => Environment.Exit(0);

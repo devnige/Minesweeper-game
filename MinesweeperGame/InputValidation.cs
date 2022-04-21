@@ -37,10 +37,9 @@ namespace MinesweeperGame
         
         public bool IsUserCellLocationInputValid(string str, int rows, int cols)
         {
-            var userSelectedRow = str.Split(',')[0];
-            var userSelectCol = str.Split(',')[1];
-            int.TryParse(userSelectedRow, out var row);
-            int.TryParse(userSelectCol, out var col);
+            var splitString = str.Split(',');
+            int.TryParse(splitString[0], out var row);
+            int.TryParse(splitString[1], out var col);
             if ((row >= 0 && row < rows) && (col >= 0 && col < cols))
                 return true;
             return false;

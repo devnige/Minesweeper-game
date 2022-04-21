@@ -12,7 +12,7 @@ namespace MinesweeperGame
         private Random _rnd;
         private string[,] _gridArray;
 
-    public RandomMineGenerator(int row, int col)
+        public RandomMineGenerator(int row, int col)
         {
             _rnd = new Random();
             _row = row;
@@ -22,7 +22,7 @@ namespace MinesweeperGame
             _gridArray = new string[row, col];
         }
         
-        public string[,] GenerateRandomMinesAndNonMines()
+        public virtual string[,] GenerateRandomMinesAndNonMines()
         {
             var numNonMines = (int) Math.Round(_arrLength * 0.9);
             GenerateNonMines(numNonMines);
@@ -30,7 +30,6 @@ namespace MinesweeperGame
             RandomSwapLocationOfMinesAndNonMines();
             MapArrayTo2DArray();
             return _gridArray;
-            // TODO test that ~90% of the grid returned is not a mine
         }
 
         private void MapArrayTo2DArray()
