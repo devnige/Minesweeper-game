@@ -9,12 +9,12 @@ namespace MinesweeperGame
         private readonly int _row;
         private readonly int _col;
         private readonly int _arrLength;
-        private Random _rnd;
-        private string[,] _gridArray;
+        private readonly Random _rnd;
+        private readonly string[,] _gridArray;
 
-        public RandomMineGenerator(int row, int col)
+        public RandomMineGenerator(Random rnd, int row, int col)
         {
-            _rnd = new Random();
+            _rnd = rnd;
             _row = row;
             _col = col;
             _arrLength = _row * _col;
