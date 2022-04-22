@@ -17,22 +17,26 @@ namespace MinesweeperGame
         private readonly InputValidation _inputValidation;
         private int _rows;
         private int _cols;
+        private readonly Random _rnd;
+        private readonly ITypeWriter _typeWriter;
 
-        public Game(TextReader textReader, TextWriter textWriter)
+        public Game(TextReader textReader, TextWriter textWriter, Random rnd, ITypeWriter typeWriter)
         {
+            _rnd = rnd;
             _textReader = textReader;
             _textWriter = textWriter;
             _inputValidation = new InputValidation(textReader, textWriter);
+            _typeWriter = typeWriter;
         }
 
         public void Run()
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Typewrite(OutputMessages.Welcome());
+            _typeWriter.Typewrite(OutputMessages.Welcome);
             Console.ResetColor();
-            Typewrite(OutputMessages.Instructions);
-            Typewrite(OutputMessages.GridGenerationOptions);
-            Typewrite(OutputMessages.GridSelection);
+            _typeWriter.Typewrite(OutputMessages.Instructions);
+            _typeWriter.Typewrite(OutputMessages.GridGenerationOptions);
+            _typeWriter.Typewrite(OutputMessages.GridSelection);
             var userGridSelection = _textReader.ReadLine(); //dequeue 1
             var validGridSelection = _inputValidation.UserGridGenerationInputValid(userGridSelection);
             if (validGridSelection == "1")
@@ -51,7 +55,7 @@ namespace MinesweeperGame
                 _cols = _inputValidation.CheckGridDimensions(userInputCols);
             }
 
-            _grid = Generate2DStringGrid(_rows, _cols);
+            _grid = Generate2DStringGrid(_rnd, _rows, _cols);
             InitialiseGrid();
             PrintGrid();
 
@@ -65,7 +69,7 @@ namespace MinesweeperGame
             {
                 var message = OutputMessages.CellSelection;
                 _textWriter.Write(message);
-                var userSelectedLocation = _textReader.ReadLine(); // dequeue 4
+                var userSelectedLocation = _textReader.ReadLine();
                 var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
                 var selectedCell = GetSelectedCell(userSelectedCellLocation);
                 if (!selectedCell.IsRevealed)
@@ -113,17 +117,17 @@ namespace MinesweeperGame
             selectedCell.IsFlagged = false;
         }
 
-        private static void Typewrite(string message)
+        // private static void Typewrite(string message)
+        // {
+        //     foreach (var t in message)
+        //     {
+        //         _textWriter.Write(t);
+        //         Thread.Sleep(15);
+        //     }
+        // }
+        private static Grid Generate2DStringGrid(Random rnd, int rows, int cols)
         {
-            foreach (var t in message)
-            {
-                _textWriter.Write(t);
-                Thread.Sleep(15);
-            }
-        }
-        private static Grid Generate2DStringGrid(int rows, int cols)
-        {
-            var randomMineGenerator = new RandomMineGenerator(rows, cols);
+            var randomMineGenerator = new RandomMineGenerator(rnd, rows, cols);
             var random2DMineStringArray = randomMineGenerator.GenerateRandomMinesAndNonMines();
             return new Grid(rows, cols, random2DMineStringArray);
         }
@@ -228,11 +232,8 @@ namespace MinesweeperGame
             SetAllCellsToRevealed();
             PrintGrid();
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
-            Typewrite(message);
-            ExitGame();
+            _textWriter.Write(message);
         }
-
-        void ExitGame() => Environment.Exit(0);
 
         void SetAllCellsToRevealed()
         {

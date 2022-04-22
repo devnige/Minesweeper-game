@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MinesweeperGame.Output
 {
-    public class FakeConsoleOut : TextWriter
+    public class FakeConsoleOut : TextWriter, ITypeWriter
     {
         //public List<string> Output;
         public Dictionary<string, int> writtenStrings = new Dictionary<string, int>();
@@ -15,7 +15,7 @@ namespace MinesweeperGame.Output
         {
             AddStringToWrittenString(str);
         }
-        
+
         private void AddStringToWrittenString(string str)
         {
             if (writtenStrings.ContainsKey(str))
@@ -26,6 +26,11 @@ namespace MinesweeperGame.Output
             {
                 writtenStrings.Add(str, 1);
             }
+        }
+
+        public void Typewrite(string message)
+        {
+            AddStringToWrittenString(message);
         }
     }
 }

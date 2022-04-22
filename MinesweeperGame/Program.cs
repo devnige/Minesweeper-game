@@ -13,7 +13,7 @@ namespace MinesweeperGame
     {
         static void Main(string[] args)
         {
-            var game = new Game(Console.In, Console.Out);
+            var game = new Game(Console.In, Console.Out, new Random(), new TypeWriter(Console.Out));
             game.Run();
         }
     }
