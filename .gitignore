@@ -30,6 +30,9 @@ bld/
 # Idea files
 .idea/
 
+#.DS_Store
+.DS_Store
+
 # JetBrains Rider
 *.sln.iml
 
