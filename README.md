@@ -13,7 +13,7 @@ A command line interface (CLI) such as Command Prompt for Windows or Terminal fo
 Using ```homebrew``` you can install the latest version of the .NET Core SDK by running the command ```brew cask install dotnet-sdk``` in the CLI
 
 #### Cloning
-This repo can be cloned to your local machine using the command ```git clone``` along with the URL copied from repository on GitHub.  
+This repo can be cloned to your local machine using the command ```git clone``` followed by the URL copied from this repository on GitHub.  
 Once cloned, navigate into the folder containing the solution and type ```dotnet restore``` to install the package dependencies.  
 
 #### Running the application
@@ -32,6 +32,8 @@ If the user chooses to reveal, then the value of the cell at that location will 
 This is achieved by changing the properties of the Cell, rebuilding the Grid and printing the string output to the Console.  
 
 #### Running the tests
+Navigate up one folder to MinesweeperGame using ```cd ..```
+Navigate to the tests folder using ```cd MineSweeperTests```
 Type ```$ dotnet test``` in your CLI to run the unit tests in the solution
 
 #### Solution Dependencies
