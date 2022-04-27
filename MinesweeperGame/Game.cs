@@ -71,7 +71,7 @@ namespace MinesweeperGame
                 _textWriter.Write(message);
                 var userSelectedLocation = _textReader.ReadLine();
                 var userSelectedCellLocation = GetCellLocation(userSelectedLocation);
-                var selectedCell = GetSelectedCell(userSelectedCellLocation);
+                var selectedCell = _grid.GetSelectedCell(userSelectedCellLocation);
                 if (!selectedCell.IsRevealed)
                 {
                     GetUserInputAndAdjustCellVisibility(selectedCell, userSelectedCellLocation);
@@ -116,15 +116,7 @@ namespace MinesweeperGame
         {
             selectedCell.IsFlagged = false;
         }
-
-        // private static void Typewrite(string message)
-        // {
-        //     foreach (var t in message)
-        //     {
-        //         _textWriter.Write(t);
-        //         Thread.Sleep(15);
-        //     }
-        // }
+        
         private static Grid Generate2DStringGrid(Random rnd, int rows, int cols)
         {
             var randomMineGenerator = new RandomMineGenerator(rnd, rows, cols);
@@ -178,11 +170,6 @@ namespace MinesweeperGame
             selectedCell.IsFlagged = true;
         }
 
-        private Cell GetSelectedCell(Location location)
-        {
-            return _grid.Cells[location.Row, location.Col];
-        }
-
         private bool IsFlagged(Location location)
         {
             return _grid.Cells[location.Row, location.Col].IsFlagged;
@@ -229,18 +216,10 @@ namespace MinesweeperGame
         void EndGame(string result)
         {
             _gameOver = true;
-            SetAllCellsToRevealed();
+            _grid.SetAllCellsToRevealed();
             PrintGrid();
             var message = result == "win" ? OutputMessages.GameOverYouWin : OutputMessages.GameOverMineSelected;
             _textWriter.Write(message);
-        }
-
-        void SetAllCellsToRevealed()
-        {
-            foreach (var c in _grid.Cells)
-            {
-                c.IsRevealed = true;
-            }
         }
     }
 }
