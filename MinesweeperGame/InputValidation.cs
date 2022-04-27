@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Xml;
 using Castle.Core.Internal;
 using MinesweeperGame.Output;
 
@@ -8,8 +6,8 @@ namespace MinesweeperGame
 {
     public class InputValidation
     {
-        private TextReader _input;
-        private TextWriter _output;
+        private readonly TextReader _input;
+        private readonly TextWriter _output;
         public InputValidation(TextReader textReader, TextWriter textWriter)
         {
             _input = textReader;
