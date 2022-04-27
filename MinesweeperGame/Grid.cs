@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MinesweeperGame
 {
@@ -22,8 +20,8 @@ namespace MinesweeperGame
         public int Rows { get; set; }
         public int Cols { get; set; }
         public int NumberOfCellsInGrid { get; }
-        public int NumberOfMines { get; set; }
-        public int NumberOfRevealedCells { get; set; }
+        public int NumberOfMines { get; private set; }
+        public int NumberOfRevealedCells { get; private set; }
 
         public List<Cell> InitialiseCells()
         {
@@ -40,7 +38,6 @@ namespace MinesweeperGame
                 {
                     Cells[x, y] = new Cell(new Location(x, y), 0, CellType.NotAMine);
                 }
-
             return mines;
         }
 
@@ -48,7 +45,7 @@ namespace MinesweeperGame
         {
             foreach (var mine in mines)
             {
-                var neighbouringCells = AddValidNeighboursToList(mine);
+                var neighbouringCells = GetNeighbouringCells(mine);
                 IncrementTheValueOfAllNonMineNeighbouringCells(neighbouringCells);
             }
         }
@@ -65,7 +62,7 @@ namespace MinesweeperGame
                 : cell.NeighbouringMines;
         }
 
-        public List<Cell> AddValidNeighboursToList(Cell currentCell)
+        private List<Cell> GetNeighbouringCells(Cell currentCell)
         {
             var upperBoundRowLimit = Cells.GetUpperBound(0);
             var lowerBoundRowLimit = Cells.GetLowerBound(0);
@@ -124,45 +121,7 @@ namespace MinesweeperGame
         {
             return Cells[location.Row, location.Col].NeighbouringMines += 1;
         }
-
-        public static string BuildGrid(Grid grid)
-        {
-            var sb = new StringBuilder();
-            sb.Append("   ");
-            for (var i = 0; i < grid.Cols; i++) sb.Append($"{i}  ");
-            sb.Append(Environment.NewLine);
-            sb.Append("   ");
-            for (var i = 0; i < grid.Cols; i++) sb.Append("_  ");
-            sb.Append(Environment.NewLine);
-            for (var x = 0; x < grid.Rows; x++)
-            {
-                sb.Append($"{x}| ");
-                for (var y = 0; y < grid.Cols; y++)
-                {
-                    var currentCell = grid.Cells[x, y];
-                    AppendCellType(currentCell, sb);
-                }
-
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString(); //string needed
-        }
-
-        private static void AppendCellType(Cell currentCell, StringBuilder sb)
-        {
-            if (!currentCell.IsRevealed && !currentCell.IsFlagged)
-                sb.Append(Constants.HiddenCell);
-
-            else if (currentCell.IsFlagged)
-                sb.Append(Constants.FlaggedCell);
-
-            else if (currentCell.IsRevealed && currentCell.CellType == CellType.NotAMine)
-                sb.Append(currentCell.NeighbouringMines + Constants.RevealedCell);
-
-            else if (currentCell.IsRevealed && currentCell.CellType == CellType.Mine) sb.Append(Constants.MineCell);
-        }
-
+        
         public Cell GetSelectedCell(Location location)
         {
             return Cells[location.Row, location.Col];
@@ -179,6 +138,40 @@ namespace MinesweeperGame
         public bool IsFlagged(Location location)
         {
             return Cells[location.Row, location.Col].IsFlagged;
+        }
+
+        public Cell RevealCellAtSelectedLocationAndNeighboursIfNotTouchingAMine(Location location)
+        {
+            var selectedCell = RevealCell(location);
+            if(selectedCell.NeighbouringMines == 0) RevealNeighbouringCellsIfNotTouchingAMine(selectedCell);
+            return selectedCell;
+        }
+
+        private void RevealNeighbouringCellsIfNotTouchingAMine(Cell selectedCell)
+        {
+            var neighbouringCells = GetNeighbouringCells(selectedCell);
+            foreach (var neighbour in neighbouringCells)
+                if (neighbour.NeighbouringMines == 0)
+                    RevealCell(neighbour.Location);
+        }
+
+        public void AddFlagToCell(Cell selectedCell)
+        {
+            selectedCell.IsFlagged = true;
+        }
+
+        public static void RemoveFlagFromCell(Cell selectedCell)
+        {
+            selectedCell.IsFlagged = false;
+        }
+
+        public Location GetCellLocation(string cellLocation)
+        {
+            var userSelectedRow = cellLocation.Split(',')[0];
+            var userSelectCol = cellLocation.Split(',')[1];
+            int.TryParse(userSelectedRow, out var row);
+            int.TryParse(userSelectCol, out var col);
+            return new Location(row, col);
         }
     }
 }
