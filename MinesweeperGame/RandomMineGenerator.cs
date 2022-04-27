@@ -1,9 +1,8 @@
 using System;
-using System.Text;
 
 namespace MinesweeperGame
 {
-    public class RandomMineGenerator
+    public sealed class RandomMineGenerator
     {
         private readonly bool[] _arr;
         private readonly int _row;
@@ -22,7 +21,7 @@ namespace MinesweeperGame
             _gridArray = new string[row, col];
         }
         
-        public virtual string[,] GenerateRandomMinesAndNonMines()
+        public string[,] GenerateRandomMinesAndNonMines()
         {
             var numNonMines = (int) Math.Round(_arrLength * 0.9);
             GenerateNonMines(numNonMines);
