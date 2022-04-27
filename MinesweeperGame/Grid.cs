@@ -162,5 +162,18 @@ namespace MinesweeperGame
 
             else if (currentCell.IsRevealed && currentCell.CellType == CellType.Mine) sb.Append(Constants.MineCell);
         }
+
+        public Cell GetSelectedCell(Location location)
+        {
+            return Cells[location.Row, location.Col];
+        }
+
+        public void SetAllCellsToRevealed()
+        {
+            foreach (var c in Cells)
+            {
+                c.IsRevealed = true;
+            }
+        }
     }
 }
