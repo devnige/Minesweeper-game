@@ -106,11 +106,6 @@ namespace MinesweeperGame
             return neighbouringCells;
         }
 
-        private void IncrementCellNeighbouringMines(Cell cell)
-        {
-            cell.NeighbouringMines += 1;
-        }
-
         public Cell RevealCell(Location location)
         {
             var selectedCell = Cells[location.Row, location.Col];
