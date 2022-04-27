@@ -10,7 +10,7 @@ A player loses by selecting and revealing a location that is a mine.
 System Requirements  
 A command line interface (CLI) such as Command Prompt for Windows or Terminal for macOS
 .Net Core 5.0 SDK or later.  
-Using ```homebrew``` you can install the latest version of the .NET Core SDK by running the command ```brew cask install dotnet-sdk``` in the CLI
+Using ```homebrew``` you can install the latest version of the .NET Cogre SDK by running the command ```brew cask install dotnet-sdk``` in the CLI
 
 #### Cloning
 This repo can be cloned to your local machine using the command ```git clone``` followed by the URL copied from this repository on GitHub.  
