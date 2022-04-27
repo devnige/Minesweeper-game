@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperGame", "Mineswee
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineSweeperTests", "MineSweeperTests\MineSweeperTests.csproj", "{5492574E-E57B-46DE-AED3-1B3AC7DAB706}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperGameTests", "MinesweeperGameTests\MinesweeperGameTests.csproj", "{57857167-0793-4E83-973D-3C4E56E7FC02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5492574E-E57B-46DE-AED3-1B3AC7DAB706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5492574E-E57B-46DE-AED3-1B3AC7DAB706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5492574E-E57B-46DE-AED3-1B3AC7DAB706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57857167-0793-4E83-973D-3C4E56E7FC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57857167-0793-4E83-973D-3C4E56E7FC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57857167-0793-4E83-973D-3C4E56E7FC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57857167-0793-4E83-973D-3C4E56E7FC02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
