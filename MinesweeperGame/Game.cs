@@ -96,11 +96,11 @@ namespace MinesweeperGame
             _textWriter.Write(message);
             var userActionResponse = _textReader.ReadLine(); // dequeue 5
             var validUserAction = _inputValidation.GetValidUserAction(userActionResponse);
-            if (validUserAction == "F" && !IsFlagged(userSelectedLocation))
+            if (validUserAction == "F" && !_grid.IsFlagged(userSelectedLocation))
             {
                 AddFlagToCell(selectedCell);
             }
-            else if (validUserAction == "D" && IsFlagged(userSelectedLocation))
+            else if (validUserAction == "D" && _grid.IsFlagged(userSelectedLocation))
             {
                 RemoveFlagFromCell(selectedCell);
             }
@@ -168,11 +168,6 @@ namespace MinesweeperGame
         void AddFlagToCell(Cell selectedCell)
         {
             selectedCell.IsFlagged = true;
-        }
-
-        private bool IsFlagged(Location location)
-        {
-            return _grid.Cells[location.Row, location.Col].IsFlagged;
         }
 
         Cell RevealCellAtSelectedLocationAndNeighboursIfNotTouchingAMine(Location location)

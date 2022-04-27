@@ -175,5 +175,10 @@ namespace MinesweeperGame
                 c.IsRevealed = true;
             }
         }
+
+        public bool IsFlagged(Location location)
+        {
+            return Cells[location.Row, location.Col].IsFlagged;
+        }
     }
 }
