@@ -2,12 +2,6 @@ using System;
 
 namespace MinesweeperGame
 {
-    public enum CellType
-    {
-        NotAMine,
-        Mine
-    }
-
     public class Cell : IEquatable<Cell>
     {
         public Location Location { get; set; }
