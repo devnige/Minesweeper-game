@@ -1,4 +1,5 @@
 ﻿using System;
+using MinesweeperGame.Output;
 
 namespace MinesweeperGame
 {
