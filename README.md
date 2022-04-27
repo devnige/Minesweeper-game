@@ -1,18 +1,19 @@
-### Minesweeper-game
+### Kata - Minesweeper Game
 
-##### Minesweeper is a game where a player chooses a location on a grid and then can reveal, flag or if already flagged, deflag the location.
-##### A location can beadd flagged by a player to mark a suspected mine location. Flagging is not necessary to win.
-##### A player wins by selecting and revealing all locations that are not mines.
-##### A player loses by selecting and revealing a location that is a mine.
+#### About the game
+Minesweeper is a game where a player chooses a location on a grid and then can reveal, flag or if already flagged, deflag the location.  
+A location can be flagged by a player to mark a suspected mine location. Flagging is not necessary to win.  
+A player wins by selecting and revealing all locations that are not mines.  
+A player loses by selecting and revealing a location that is a mine.  
 
 #### Installation
-System Requirements
+System Requirements  
 A command line interface (CLI) such as Command Prompt for Windows or Terminal for macOS
 .Net Core 5.0 SDK or later. Using ```homebrew``` you can install the latest version of the .NET Core SDK by running the command ```brew cask install dotnet-sdk``` in the CLI
 
 #### Cloning
-This repo can be cloned to your local machine using the command ```git clone``` along with the URL copied from repository on GitHub.
-Once cloned, navigate into the folder containing the solution and type ```dotnet restore``` to install the package dependencies
+This repo can be cloned to your local machine using the command ```git clone``` along with the URL copied from repository on GitHub.  
+Once cloned, navigate into the folder containing the solution and type ```dotnet restore``` to install the package dependencies.  
 
 #### Running the application
 Navigate to the correct folder using the following command
