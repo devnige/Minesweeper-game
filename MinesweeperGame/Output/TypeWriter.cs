@@ -1,8 +1,7 @@
 using System.IO;
-using System.Net.Mime;
 using System.Threading;
 
-namespace MinesweeperGame
+namespace MinesweeperGame.Output
 {
     public class TypeWriter : ITypeWriter
     {
