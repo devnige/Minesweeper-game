@@ -21,7 +21,7 @@ namespace MinesweeperGame.Output
                                                      "You win by selecting and revealing all the locations that are not mines." + eNL +
                                                      "If you select a mine location, the game is over!" + eNL;
 
-        public static readonly string GridGenerationOptions = "You can play a random pre-determined grid or generate your own custom grid." + eNL;
+        public static readonly string GridTypeOptions = "You can play a random generated grid or generate your own custom grid." + eNL;
             
         public static readonly string GridSelection = "Enter 1 for random grid or 2 for custom grid." + eNL;
 
